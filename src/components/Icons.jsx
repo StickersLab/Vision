@@ -12,31 +12,13 @@ export const FCHK = (
 
 export function Logo() {
   return (
-    <svg width="38" height="38" viewBox="0 0 16 16" style={{imageRendering:'pixelated'}} fill="none">
-      <rect x="6" y="2" width="4" height="1" fill="#E63946"/>
-      <rect x="5" y="3" width="6" height="1" fill="#E63946"/>
-      <rect x="5" y="4" width="6" height="5" fill="#C8102E"/>
-      <rect x="6" y="9" width="4" height="2" fill="#C8102E"/>
-      <rect x="7" y="11" width="2" height="3" fill="#C8102E"/>
-      <rect x="5" y="3" width="1" height="1" fill="#C8F04A"/>
-      <rect x="10" y="3" width="1" height="1" fill="#C8F04A"/>
-      <rect x="5" y="7" width="1" height="1" fill="#C8F04A"/>
-      <rect x="10" y="7" width="1" height="1" fill="#C8F04A"/>
-    </svg>
+    <img src="/logo-source.png" alt="Vision." style={{width:'38px',height:'38px',objectFit:'contain',borderRadius:'6px'}} />
   )
 }
 
 export function LogoSmall() {
   return (
-    <svg width="48" height="48" viewBox="0 0 16 16" style={{imageRendering:'pixelated'}} fill="none">
-      <rect x="6" y="2" width="4" height="1" fill="#E63946"/>
-      <rect x="5" y="3" width="6" height="1" fill="#E63946"/>
-      <rect x="5" y="4" width="6" height="4" fill="#C8102E"/>
-      <rect x="6" y="8" width="4" height="2" fill="#C8102E"/>
-      <rect x="7" y="10" width="2" height="2" fill="#C8102E"/>
-      <rect x="6" y="2" width="1" height="1" fill="#C8F04A"/>
-      <rect x="9" y="2" width="1" height="1" fill="#C8F04A"/>
-    </svg>
+    <img src="/logo-source.png" alt="Vision." style={{width:'72px',height:'72px',objectFit:'contain',borderRadius:'12px',marginBottom:'8px'}} />
   )
 }
 
