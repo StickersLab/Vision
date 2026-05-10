@@ -1,50 +1,76 @@
-export const COURSES_DATA = [
-  { cat:'Base liquide & shakes', bc:'#5BB8F5', items:[
-    { n:'Lait entier', q:'2.5L/sem', w:'Base shakes' },
-    { n:'Fromage blanc 0%', q:'1kg', w:'Protéines lentes' },
-    { n:'Yaourt grec entier', q:'4 pots', w:'Collation' },
-    { n:"Jus d'orange 100%", q:'1L', w:'Glucides rapides' },
-  ]},
-  { cat:'Fruits', bc:'#F0A050', items:[
-    { n:'Bananes', q:'14-16', w:'Tous les shakes' },
-    { n:'Dattes Medjool', q:'200g', w:'Pré-workout' },
-    { n:'Mangue surgelée', q:'500g', w:'Shakes' },
-    { n:'Myrtilles', q:'200g', w:'Récup' },
-  ]},
-  { cat:'Protéines', bc:'#8BE8C8', items:[
-    { n:'Œufs entiers', q:'18', w:'PDJ' },
-    { n:'Poulet', q:'600g', w:'Déjeuner ×3' },
-    { n:'Steak haché 15%', q:'400g', w:'Déjeuner ×2' },
-    { n:'Saumon', q:'400g', w:'Dîner' },
-    { n:'Thon boîte', q:'3', w:'Rapide' },
-    { n:'Comté', q:'150g', w:'Calories' },
-  ]},
-  { cat:'Féculents', bc:'#C8F04A', items:[
-    { n:"Flocons d'avoine", q:'1kg', w:'PDJ+shakes' },
-    { n:'Riz blanc', q:'1kg', w:'Déjeuner' },
-    { n:'Pâtes', q:'500g', w:'Dîner' },
-    { n:'Pain complet', q:'1', w:'Snack' },
-    { n:'Patate douce', q:'500g', w:'Post-workout' },
-  ]},
-  { cat:'Graisses', bc:'#F0A050', items:[
-    { n:'Beurre cacahuète', q:'500g', w:'+120kcal/20g' },
-    { n:'Avocats', q:'4-5', w:'Dîner' },
-    { n:'Amandes', q:'200g', w:'Collation' },
-    { n:"Huile d'olive", q:'1 bouteille', w:'Cuisson' },
-    { n:'Miel', q:'1 pot', w:'Shakes' },
-  ]},
-  { cat:'Compléments', bc:'#B8A0F8', items:[
-    { n:'Whey protéine', q:'1kg', w:'+25g P' },
-    { n:'Créatine 5g/jour', q:'500g', w:'Force+masse' },
-    { n:'Vitamine D3', q:'1 boîte', w:'Carence' },
-    { n:'Oméga-3', q:'1 boîte', w:'Récup' },
-  ]},
-  { cat:'Légumes', bc:'#8BE8C8', items:[
-    { n:'Épinards', q:'500g', w:'Shakes' },
-    { n:'Brocolis', q:'400g', w:'Repas' },
-    { n:'Tomates cerises', q:'250g', w:'Vitamines' },
-    { n:'Courgettes', q:'2-3', w:'Digeste' },
-  ]},
+export const DEF_COURSES = [
+  {
+    cat: 'Protéines', bc: '#8BE8C8',
+    items: [
+      { n:'Œufs',                q:'18',   w:'PDJ + cuisson' },
+      { n:'Poulet',              q:'600g', w:'Déjeuner ×3' },
+      { n:'Dinde',               q:'400g', w:'Alternative poulet' },
+      { n:'Steak haché 5%',      q:'400g', w:'Déjeuner ×2' },
+      { n:'Bœuf',                q:'300g', w:'Dîner' },
+      { n:'Saumon',              q:'400g', w:'Oméga-3 + protéines' },
+      { n:'Thon (boîte)',        q:'3',    w:'Rapide' },
+      { n:'Sardines',            q:'2',    w:'Oméga-3' },
+      { n:'Fromage blanc 0%',    q:'1kg',  w:'Protéines lentes' },
+      { n:'Skyr',                q:'500g', w:'Collation protéinée' },
+      { n:'Yaourt grec entier',  q:'4',    w:'Collation' },
+      { n:'Lait entier',         q:'2L',   w:'Base shakes' },
+      { n:'Whey protéine',       q:'1kg',  w:'+25g P par dose' },
+    ],
+  },
+  {
+    cat: 'Glucides', bc: '#C8F04A',
+    items: [
+      { n:'Riz blanc',           q:'1kg',  w:'Déjeuner' },
+      { n:'Pâtes',               q:'500g', w:'Dîner' },
+      { n:"Flocons d'avoine",    q:'1kg',  w:'PDJ + shakes' },
+      { n:'Pain complet',        q:'1',    w:'Snack' },
+      { n:'Pommes de terre',     q:'1kg',  w:'Post-workout' },
+      { n:'Patates douces',      q:'500g', w:'Post-workout' },
+      { n:'Bananes',             q:'14',   w:'Tous les shakes' },
+      { n:'Miel',                q:'1 pot',w:'Shakes + énergie' },
+      { n:'Granola',             q:'400g', w:'PDJ rapide' },
+      { n:'Semoule',             q:'500g', w:'Alternative riz' },
+      { n:'Tortillas / wraps',   q:'1 pqt',w:'Snack rapide' },
+    ],
+  },
+  {
+    cat: 'Calories faciles', bc: '#F06080',
+    items: [
+      { n:'Jus de fruits 100%',  q:'1L',   w:'Glucides rapides' },
+      { n:'Fruits secs',         q:'200g', w:'+500kcal/100g' },
+      { n:'Barres céréales',     q:'6',    w:'En-cas rapide' },
+      { n:'Chocolat noir 70%',   q:'100g', w:'Graisses + calories' },
+    ],
+  },
+  {
+    cat: 'Bonnes graisses', bc: '#F0A050',
+    items: [
+      { n:'Avocats',             q:'4-5',  w:'Dîner' },
+      { n:"Huile d'olive",       q:'1',    w:'Cuisson' },
+      { n:'Amandes',             q:'200g', w:'Collation' },
+      { n:'Noix',                q:'150g', w:'Collation' },
+      { n:'Noix de cajou',       q:'150g', w:'Collation' },
+      { n:'Beurre de cacahuète', q:'500g', w:'+120kcal/20g' },
+      { n:'Fromage (Comté)',      q:'150g', w:'Calories denses' },
+    ],
+  },
+  {
+    cat: 'Légumes', bc: '#8BE8C8',
+    items: [
+      { n:'Épinards',            q:'500g', w:'Shakes verts' },
+      { n:'Brocolis',            q:'400g', w:'Repas' },
+      { n:'Tomates cerises',     q:'250g', w:'Vitamines' },
+      { n:'Courgettes',          q:'2-3',  w:'Digeste' },
+    ],
+  },
+  {
+    cat: 'Compléments', bc: '#B8A0F8',
+    items: [
+      { n:'Créatine 5g/jour',    q:'500g', w:'Force + masse' },
+      { n:'Vitamine D3',         q:'1 boîte', w:'Carence' },
+      { n:"Oméga-3",             q:'1 boîte', w:'Récup' },
+    ],
+  },
 ]
 
 export const REPAS = [
@@ -76,7 +102,7 @@ export const SHAKES = [
   { bc:'#8BE8C8', t:'Smoothie masse vert', h:'15h30 · 390 kcal · 25g P',
     ing:[['250ml','lait entier'],['100g','fromage blanc 0%'],['1','banane'],['30g',"flocons d'avoine"],['1 poignée','épinards'],['15g','amandes']] },
   { bc:'#F06080', t:'Boost pré-workout', h:'18h30 · 200 kcal',
-    ing:[['2','dattes Medjool'],['1','banane'],['200ml',"jus d'orange"],['1 pincée','sel']] },
+    ing:[['2','dattes / fruits secs'],['1','banane'],['200ml',"jus d'orange"],['1 pincée','sel']] },
   { bc:'#B8A0F8', t:'Recovery shake', h:'19h25 · 200 kcal · 30g P',
     ing:[['300ml','lait ou eau'],['1 dose','whey'],['1','banane']] },
   { bc:'#444', t:'Casein nuit (si faim)', h:'21h30 · 200 kcal · 20g P',

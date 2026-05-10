@@ -4,12 +4,18 @@ import { LogoSmall } from './Icons'
 
 export default function Onboarding() {
   const { dispatch } = useApp()
-  const [name, setName] = useState('')
+  const [name, setName]     = useState('')
   const [weight, setWeight] = useState('')
+  const [goal, setGoal]     = useState('')
 
   function finish() {
     if (!name.trim()) return
-    dispatch({ type:'FINISH_ONBOARD', name: name.trim(), weight: parseFloat(weight) })
+    dispatch({
+      type:   'FINISH_ONBOARD',
+      name:   name.trim(),
+      weight: parseFloat(weight),
+      goal:   parseFloat(goal) || 65,
+    })
   }
 
   return (
@@ -27,8 +33,15 @@ export default function Onboarding() {
         type="number"
         value={weight}
         onChange={e => setWeight(e.target.value)}
-        placeholder="Ton poids actuel (kg)"
+        placeholder="Poids actuel (kg)"
         step="0.1"
+      />
+      <input
+        type="number"
+        value={goal}
+        onChange={e => setGoal(e.target.value)}
+        placeholder="Objectif de poids (kg) — ex: 75"
+        step="0.5"
       />
       <button onClick={finish}>COMMENCER →</button>
     </div>
