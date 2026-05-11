@@ -15,7 +15,7 @@
   --bg:#1A0F3C;--bg2:#231555;--bg3:#2D1B69;--bg4:#3A2580;
   --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.16);
   --text:#F0EDE8;--text2:rgba(240,237,232,0.58);--text3:rgba(240,237,232,0.28);
-  --accent:#C8F04A;--red:#F06080;--r:10px;--r2:16px;
+  --accent:#FCFF3B;--red:#F06080;--r:10px;--r2:16px;
   --card-bg:var(--bg2);--input-bg:var(--bg3)
 }
 .light{
@@ -56,8 +56,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 /* STREAK */
 .streak-row{display:flex;gap:5px;margin-bottom:16px}
 .sday{flex:1;background:var(--bg3);border-radius:8px;padding:8px 4px;text-align:center;border:0.5px solid var(--border)}
-.sday.done{background:rgba(200,240,74,.1);border-color:rgba(200,240,74,.3)}
-.sday.today{background:rgba(200,240,74,.18);border-color:var(--accent)}
+.sday.done{background:rgba(252,255,59,.1);border-color:rgba(252,255,59,.3)}
+.sday.today{background:rgba(252,255,59,.18);border-color:var(--accent)}
 .sdl{font-size:8px;color:var(--text3);display:block;margin-bottom:4px;font-weight:600;font-family:'DM Mono',monospace}
 .sdi{font-size:12px;font-weight:700;color:var(--text3)}
 .sday.done .sdi,.sday.today .sdi{color:var(--accent)}
@@ -65,7 +65,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .mod-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
 .mod-card{background:var(--card-bg);border:0.5px solid var(--border);border-radius:var(--r2);padding:14px;cursor:pointer;transition:all .15s}
 .mod-card:active{opacity:.7;transform:scale(.97)}
-.mod-card.done{border-color:rgba(200,240,74,.3)}
+.mod-card.done{border-color:rgba(252,255,59,.3)}
 .mod-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
 .mod-pct{font-size:10px;font-weight:700;color:var(--text3);font-family:'DM Mono',monospace}
 .mod-card.done .mod-pct{color:var(--accent)}
@@ -74,7 +74,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .mod-fill{height:100%;border-radius:1px}
 /* CHECKS */
 .ci{display:flex;align-items:flex-start;gap:12px;padding:12px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);cursor:pointer;margin-bottom:6px;transition:all .15s}
-.ci.ck{background:rgba(200,240,74,.13);border-color:rgba(200,240,74,.4)}
+.ci.ck{background:rgba(252,255,59,.13);border-color:rgba(252,255,59,.4)}
 .ci:active{opacity:.7}
 .cb{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--bg4)}
 .ci.ck .cb{background:var(--accent);border-color:var(--accent)}
@@ -88,7 +88,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .edit-item{display:flex;align-items:center;gap:8px;padding:8px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);margin-bottom:6px}
 .edit-input{flex:1;background:transparent;border:none;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;outline:none}
 .del-btn{width:22px;height:22px;border-radius:5px;background:rgba(240,96,128,.2);border:none;cursor:pointer;color:#F06080;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.add-btn{width:100%;padding:10px;background:rgba(200,240,74,.08);border:0.5px dashed rgba(200,240,74,.3);border-radius:var(--r);color:var(--accent);font-size:11px;font-weight:500;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.05em;margin-top:4px}
+.add-btn{width:100%;padding:10px;background:rgba(252,255,59,.08);border:0.5px dashed rgba(252,255,59,.3);border-radius:var(--r);color:var(--accent);font-size:11px;font-weight:500;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.05em;margin-top:4px}
 .back-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:22px;padding:0;margin-right:8px;line-height:1}
 /* TABS */
 .tabs{display:flex;gap:4px;background:var(--bg3);padding:4px;border-radius:var(--r);margin-bottom:16px}
@@ -98,7 +98,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .tli{display:flex;gap:10px;margin-bottom:6px}
 .tlt{font-size:9px;font-weight:500;color:var(--text3);width:38px;flex-shrink:0;padding-top:12px;font-family:'DM Mono',monospace}
 .tlc{flex:1;background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--r);padding:10px 12px;cursor:pointer;transition:all .15s}
-.tlc.ck{background:rgba(200,240,74,.1);border-color:rgba(200,240,74,.3)}
+.tlc.ck{background:rgba(252,255,59,.1);border-color:rgba(252,255,59,.3)}
 .tln{font-size:13px;font-weight:500;color:var(--text2)}
 .tlc.ck .tln{color:var(--text)}
 .tls{font-size:11px;color:var(--text3);margin-top:2px}
@@ -129,13 +129,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .exo-meta{font-size:10px;color:var(--text3);margin-top:2px;font-family:'DM Mono',monospace}
 .exo-tip{font-size:10px;color:var(--text3);font-style:italic;margin-top:2px}
 /* GO NOW */
-.gonow{background:rgba(200,240,74,.07);border:1px solid rgba(200,240,74,.2);border-radius:var(--r2);padding:16px;margin-bottom:16px}
+.gonow{background:rgba(252,255,59,.07);border:1px solid rgba(252,255,59,.2);border-radius:var(--r2);padding:16px;margin-bottom:16px}
 .gonow-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--accent);margin-bottom:12px}
-.gonow-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid rgba(200,240,74,.12)}
+.gonow-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:0.5px solid rgba(252,255,59,.12)}
 .gonow-item:last-of-type{border-bottom:none}
 .gonow-num{width:22px;height:22px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--bg);flex-shrink:0}
 .gonow-name{font-size:13px;font-weight:500}
-.gonow-sets{font-size:10px;color:rgba(200,240,74,.6);margin-top:2px;font-family:'DM Mono',monospace}
+.gonow-sets{font-size:10px;color:rgba(252,255,59,.6);margin-top:2px;font-family:'DM Mono',monospace}
 .start-btn{width:100%;padding:14px;background:var(--accent);border:none;border-radius:var(--r);font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--bg);cursor:pointer;margin-top:10px;transition:opacity .2s}
 .start-btn:disabled{opacity:.3;cursor:not-allowed}
 .need-more{font-size:11px;color:var(--text3);text-align:center;padding:8px 0;font-family:'DM Mono',monospace}
@@ -168,7 +168,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .sh-streak{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--accent)}
 .sh-days{display:flex;gap:4px}
 .sh-day{flex:1;background:var(--bg3);border-radius:8px;padding:8px 4px;text-align:center;border:0.5px solid var(--border);cursor:pointer}
-.sh-day.done{background:rgba(200,240,74,.1);border-color:rgba(200,240,74,.3)}
+.sh-day.done{background:rgba(252,255,59,.1);border-color:rgba(252,255,59,.3)}
 .sh-day.today{border-color:var(--accent)}
 .sh-day span{display:block;font-size:8px;color:var(--text3);font-family:'DM Mono',monospace}
 .sh-day .sh-di{font-size:11px;font-weight:700;color:var(--text3);margin-top:2px}
@@ -203,14 +203,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .wbv{font-size:10px;font-weight:600;color:var(--text2);width:28px;text-align:right;flex-shrink:0;font-family:'DM Mono',monospace}
 /* MISC */
 .badge{font-size:10px;padding:4px 10px;border-radius:100px;border:0.5px solid var(--border2);color:var(--text2);display:inline-block;margin:3px;font-family:'DM Mono',monospace}
-.lvl-pill{display:inline-flex;align-items:center;background:rgba(200,240,74,.1);border:0.5px solid rgba(200,240,74,.25);border-radius:100px;padding:4px 12px;font-size:10px;font-weight:600;color:var(--accent);margin-bottom:10px;font-family:'DM Mono',monospace;letter-spacing:.05em}
+.lvl-pill{display:inline-flex;align-items:center;background:rgba(252,255,59,.1);border:0.5px solid rgba(252,255,59,.25);border-radius:100px;padding:4px 12px;font-size:10px;font-weight:600;color:var(--accent);margin-bottom:10px;font-family:'DM Mono',monospace;letter-spacing:.05em}
 .info-box{background:var(--bg3);border-radius:var(--r);padding:12px;font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:14px;border-left:2px solid var(--border2)}
 .next-badge{display:flex;align-items:center;gap:10px;padding-bottom:12px;margin-bottom:12px;border-bottom:0.5px solid var(--border)}
 .next-badge:last-child{border:none;padding:0;margin:0}
 .copy-btn{width:100%;padding:12px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);color:var(--accent);font-size:11px;font-weight:500;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.05em;margin-top:8px;transition:all .2s}
-.copy-btn.copied{background:rgba(200,240,74,.15);border-color:rgba(200,240,74,.4)}
+.copy-btn.copied{background:rgba(252,255,59,.15);border-color:rgba(252,255,59,.4)}
 .fitem{background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);padding:10px;cursor:pointer;display:flex;align-items:flex-start;gap:8px;transition:all .15s;margin-bottom:6px}
-.fitem.ck{background:rgba(200,240,74,.1);border-color:rgba(200,240,74,.3)}
+.fitem.ck{background:rgba(252,255,59,.1);border-color:rgba(252,255,59,.3)}
 .fcb{width:14px;height:14px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px;background:var(--bg4)}
 .fitem.ck .fcb{background:var(--accent);border-color:var(--accent)}
 .fn{font-size:12px;font-weight:500;color:var(--text2)}
@@ -238,7 +238,8 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
   <h1>Vision.</h1>
   <p>Ton lifestyle OS personnel.<br/>Commence par te présenter.</p>
   <input id="ob-name" placeholder="Ton prénom" maxlength="20"/>
-  <input id="ob-email" type="email" placeholder="Ton email (optionnel)" maxlength="80"/>
+  <input id="ob-email" type="email" placeholder="Ton email" maxlength="80" oninput="validateObEmail()" style="border-color:var(--border2)"/>
+  <div id="ob-email-err" style="display:none;font-size:11px;color:#F06080;font-family:'DM Mono',monospace;margin-top:-6px;margin-bottom:4px;text-align:center">Email invalide — ex: prenom@gmail.com</div>
   <input id="ob-weight" type="number" placeholder="Poids actuel (kg) — ex: 72" step="0.1"/>
   <input id="ob-goal" type="number" placeholder="Objectif de poids (kg) — ex: 80" step="0.5"/>
   <button onclick="finishOnboard()">COMMENCER →</button>
@@ -283,10 +284,18 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
     </button>
     <button class="nb" onclick="nav('alim',this)">
       <svg width="20" height="20" viewBox="0 0 16 16" style="image-rendering:pixelated" fill="none">
-        <rect x="3" y="1" width="2" height="5" fill="currentColor"/><rect x="2" y="2" width="1" height="3" fill="currentColor"/>
-        <rect x="5" y="2" width="1" height="3" fill="currentColor"/><rect x="2" y="6" width="4" height="1" fill="currentColor"/>
-        <rect x="3" y="7" width="2" height="7" fill="currentColor"/><rect x="9" y="1" width="2" height="1" fill="currentColor"/>
-        <rect x="8" y="2" width="4" height="5" fill="currentColor"/><rect x="9" y="7" width="2" height="7" fill="currentColor"/>
+        <!-- Fourchette gauche -->
+        <rect x="2" y="1" width="1" height="3" fill="currentColor"/>
+        <rect x="4" y="1" width="1" height="3" fill="currentColor"/>
+        <rect x="3" y="1" width="1" height="5" fill="currentColor"/>
+        <rect x="3" y="6" width="1" height="7" fill="currentColor"/>
+        <!-- Assiette (ovale centré) -->
+        <rect x="6" y="5" width="4" height="1" fill="currentColor"/>
+        <rect x="5" y="6" width="6" height="4" fill="currentColor"/>
+        <rect x="6" y="10" width="4" height="1" fill="currentColor"/>
+        <!-- Couteau droit -->
+        <rect x="12" y="1" width="2" height="5" fill="currentColor"/>
+        <rect x="13" y="6" width="1" height="7" fill="currentColor"/>
       </svg>
       <span class="nb-label">Alim</span>
     </button>
@@ -398,11 +407,11 @@ const IC = {
     <rect x="14" y="6" width="2" height="4" fill="${c}"/>
   </svg>`,
   hand:`<svg width="26" height="26" viewBox="0 0 16 16" style="image-rendering:pixelated" fill="none">
-    <rect x="6" y="1" width="2" height="5" fill="#C8F04A"/><rect x="9" y="2" width="2" height="4" fill="#C8F04A"/>
-    <rect x="12" y="3" width="2" height="4" fill="#C8F04A"/><rect x="3" y="5" width="2" height="4" fill="#C8F04A"/>
-    <rect x="5" y="6" width="11" height="4" fill="#C8F04A"/><rect x="4" y="9" width="1" height="2" fill="#C8F04A"/>
-    <rect x="5" y="10" width="8" height="2" fill="#C8F04A"/><rect x="5" y="12" width="6" height="1" fill="#C8F04A"/>
-    <rect x="6" y="13" width="4" height="1" fill="#C8F04A"/>
+    <rect x="6" y="1" width="2" height="5" fill="#FCFF3B"/><rect x="9" y="2" width="2" height="4" fill="#FCFF3B"/>
+    <rect x="12" y="3" width="2" height="4" fill="#FCFF3B"/><rect x="3" y="5" width="2" height="4" fill="#FCFF3B"/>
+    <rect x="5" y="6" width="11" height="4" fill="#FCFF3B"/><rect x="4" y="9" width="1" height="2" fill="#FCFF3B"/>
+    <rect x="5" y="10" width="8" height="2" fill="#FCFF3B"/><rect x="5" y="12" width="6" height="1" fill="#FCFF3B"/>
+    <rect x="6" y="13" width="4" height="1" fill="#FCFF3B"/>
   </svg>`,
 }
 
@@ -436,7 +445,7 @@ const DEF_MODS=[
   {id:'read',name:'Lecture',color:'#F0A050',ic:'read',checks:["Session lecture 15min+","Pas de téléphone pendant","Note écrite après"],xps:[20,10,15]},
   {id:'medite',name:'Méditation',color:'#8BE8C8',ic:'medite',checks:["Session 10min+ effectuée","Sans interruption","Ressenti noté"],xps:[25,15,10]},
   {id:'water',name:'Hydratation',color:'#5BB8F5',ic:'water',checks:["Verre d'eau au réveil","1L avant midi","2L avant 17h","2.5L atteints"],xps:[10,10,15,15]},
-  {id:'finance',name:'Finance',color:'#C8F04A',ic:'finance',checks:["Budget de la semaine revu","Épargne virée","Dépenses vérifiées","Revenu side project tracké"],xps:[15,20,10,15]},
+  {id:'finance',name:'Finance',color:'#FCFF3B',ic:'finance',checks:["Budget de la semaine revu","Épargne virée","Dépenses vérifiées","Revenu side project tracké"],xps:[15,20,10,15]},
   {id:'mass',name:'Prise de masse',color:'#B8A0F8',ic:'mass',checks:["Pesée à jeun (lundi)","Excédent +400 kcal","Photo progression (lundi)","Mensurations (lundi)"],xps:[10,20,10,10]},
 ]
 
@@ -456,21 +465,21 @@ const PILIERS_LIB=[
   {id:'read',name:'Lecture',color:'#F0A050',ic:'read',checks:["Session lecture 15min+","Pas de téléphone pendant","Note écrite après"],xps:[20,10,15]},
   {id:'medite',name:'Méditation',color:'#8BE8C8',ic:'medite',checks:["Session 10min+ effectuée","Sans interruption","Ressenti noté"],xps:[25,15,10]},
   {id:'water',name:'Hydratation',color:'#5BB8F5',ic:'water',checks:["Verre d'eau au réveil","1L avant midi","2L avant 17h","2.5L atteints"],xps:[10,10,15,15]},
-  {id:'finance',name:'Finance',color:'#C8F04A',ic:'finance',checks:["Budget de la semaine revu","Épargne virée","Dépenses vérifiées","Revenu side project tracké"],xps:[15,20,10,15]},
+  {id:'finance',name:'Finance',color:'#FCFF3B',ic:'finance',checks:["Budget de la semaine revu","Épargne virée","Dépenses vérifiées","Revenu side project tracké"],xps:[15,20,10,15]},
   {id:'mass',name:'Prise de masse',color:'#B8A0F8',ic:'mass',checks:["Pesée à jeun (lundi)","Excédent +400 kcal","Photo progression (lundi)","Mensurations (lundi)"],xps:[10,20,10,10]},
   {id:'smoke',name:'Stop tabac',color:'#F06080',ic:'smoke',checks:["0 cigarette aujourd'hui","Envie résistée","Alternative saine utilisée","Journée notée"],xps:[30,20,10,10]},
   {id:'alcohol',name:'Stop alcool',color:'#F06080',ic:'alcohol',checks:["0 alcool aujourd'hui","Sortie sociale sans alcool","Alternative choisie","Journée notée"],xps:[30,15,10,10]},
   {id:'screen',name:'Détox écrans',color:'#F472B6',ic:'screen',checks:["Pas de téléphone le matin 1h","Pas de réseaux après 21h","Temps écran < 2h","Soirée sans écran"],xps:[20,15,15,20]},
   {id:'network',name:'Networking',color:'#8BE8C8',ic:'network',checks:["1 message envoyé à un contact","1 interaction LinkedIn","1 café/appel planifié","Suivi d'un contact"],xps:[15,10,20,15]},
   {id:'creativity',name:'Créativité',color:'#F0A050',ic:'creativity',checks:["30min de création libre","Idée notée dans le carnet","Projet créatif avancé","Sans téléphone pendant"],xps:[20,10,25,10]},
-  {id:'speaking',name:'Prise de parole',color:'#C8F04A',ic:'speaking',checks:["1 prise de parole en public","Discours préparé","Feedback demandé","Enregistrement écouté"],xps:[25,15,15,10]},
+  {id:'speaking',name:'Prise de parole',color:'#FCFF3B',ic:'speaking',checks:["1 prise de parole en public","Discours préparé","Feedback demandé","Enregistrement écouté"],xps:[25,15,15,10]},
   {id:'language',name:'Langue étrangère',color:'#5BB8F5',ic:'language',checks:["15min de pratique","Duolingo ou app utilisée","1 contenu en langue cible","Vocabulaire noté"],xps:[15,10,15,10]},
   {id:'spirit',name:'Spiritualité',color:'#B8A0F8',ic:'spirit',checks:["Temps de prière/méditation","Gratitude écrite","Lecture spirituelle","Déconnexion 30min nature"],xps:[15,10,15,20]},
   {id:'orga',name:'Organisation',color:'#8BE8C8',ic:'orga',checks:["To-do liste faite le soir","Bureau rangé","Emails triés","Planning semaine revu"],xps:[10,10,10,20]},
   {id:'family',name:'Famille',color:'#F472B6',ic:'family',checks:["Appel ou message à un proche","Moment qualité partagé","Écoute active pratiquée","Gratitude exprimée"],xps:[15,20,15,10]},
   {id:'care',name:'Soins personnels',color:'#F0A050',ic:'care',checks:["Routine soin peau","Hygiène complète","Coiffure/apparence soignée","Tenue préparée la veille"],xps:[10,10,10,10]},
   {id:'health',name:'Santé',color:'#8BE8C8',ic:'health',checks:["Médicaments/compléments pris","Rendez-vous médical planifié","Symptôme noté si besoin","Sommeil & stress évalués"],xps:[15,15,10,10]},
-  {id:'project',name:'Projet perso',color:'#C8F04A',ic:'project',checks:["1h sur le projet principal","Tâche clé avancée","Blocage identifié","Prochaine action notée"],xps:[30,20,10,10]},
+  {id:'project',name:'Projet perso',color:'#FCFF3B',ic:'project',checks:["1h sur le projet principal","Tâche clé avancée","Blocage identifié","Prochaine action notée"],xps:[30,20,10,10]},
   {id:'skills',name:'Compétences',color:'#5BB8F5',ic:'skills',checks:["Formation ou tuto 30min","Note de synthèse écrite","Pratique appliquée","Progression évaluée"],xps:[20,10,20,10]},
   {id:'balance',name:'Équilibre / Fun',color:'#F472B6',ic:'balance',checks:["Activité plaisir 30min","Sortie ou loisir planifié","Temps seul respecté","Rire ou détente consciente"],xps:[15,15,10,10]},
 ]
@@ -513,7 +522,7 @@ const MUSCLES=[
     {n:'Bird dog',s:3,r:'10 de chaque',tip:'4 pattes, bras+jambe opposés'},
     {n:'Hyperextensions au sol',s:3,r:'12',tip:'Ventre au sol'},
   ]},
-  {id:'legs',name:'Jambes',color:'#C8F04A',exos:[
+  {id:'legs',name:'Jambes',color:'#FCFF3B',exos:[
     {n:'Squats poids de corps',s:4,r:'15-20',tip:'Genoux dans axe des pieds'},
     {n:'Fentes avant alternées',s:3,r:'12 de chaque',tip:'Genou arrière proche du sol'},
     {n:'Jump squats',s:3,r:'10-12',tip:'Explosif, atterrissage contrôlé'},
@@ -541,7 +550,7 @@ const MUSCLES=[
     {n:'Leg raises',s:3,r:'12-15',tip:'Jambes tendues'},
     {n:'Hollow body hold',s:3,r:'30 sec',tip:'Bas du dos au sol'},
   ]},
-  {id:'cardio',name:'Cardio / Full body',color:'#C8F04A',exos:[
+  {id:'cardio',name:'Cardio / Full body',color:'#FCFF3B',exos:[
     {n:'Burpees',s:3,r:'8-10',tip:'Explosif et fluide'},
     {n:'High knees',s:3,r:'30 sec',tip:'Genoux à hauteur de hanche'},
     {n:'Box step-ups',s:3,r:'12 de chaque',tip:'Chaise stable'},
@@ -552,7 +561,7 @@ const COURSES_DATA=[
   {cat:'Base liquide & shakes',bc:'#5BB8F5',items:[{n:'Lait entier',q:'2.5L/sem',w:'Base shakes'},{n:'Fromage blanc 0%',q:'1kg',w:'Protéines lentes'},{n:'Yaourt grec entier',q:'4 pots',w:'Collation'},{n:"Jus d'orange 100%",q:'1L',w:'Glucides rapides'}]},
   {cat:'Fruits',bc:'#F0A050',items:[{n:'Bananes',q:'14-16',w:'Tous les shakes'},{n:'Dattes Medjool',q:'200g',w:'Pré-workout'},{n:'Mangue surgelée',q:'500g',w:'Shakes'},{n:'Myrtilles',q:'200g',w:'Récup'}]},
   {cat:'Protéines',bc:'#8BE8C8',items:[{n:'Œufs entiers',q:'18',w:'PDJ'},{n:'Poulet',q:'600g',w:'Déjeuner ×3'},{n:'Steak haché 15%',q:'400g',w:'Déjeuner ×2'},{n:'Saumon',q:'400g',w:'Dîner'},{n:'Thon boîte',q:'3',w:'Rapide'},{n:'Comté',q:'150g',w:'Calories'}]},
-  {cat:'Féculents',bc:'#C8F04A',items:[{n:"Flocons d'avoine",q:'1kg',w:'PDJ+shakes'},{n:'Riz blanc',q:'1kg',w:'Déjeuner'},{n:'Pâtes',q:'500g',w:'Dîner'},{n:'Pain complet',q:'1',w:'Snack'},{n:'Patate douce',q:'500g',w:'Post-workout'}]},
+  {cat:'Féculents',bc:'#FCFF3B',items:[{n:"Flocons d'avoine",q:'1kg',w:'PDJ+shakes'},{n:'Riz blanc',q:'1kg',w:'Déjeuner'},{n:'Pâtes',q:'500g',w:'Dîner'},{n:'Pain complet',q:'1',w:'Snack'},{n:'Patate douce',q:'500g',w:'Post-workout'}]},
   {cat:'Graisses',bc:'#F0A050',items:[{n:'Beurre cacahuète',q:'500g',w:'+120kcal/20g'},{n:'Avocats',q:'4-5',w:'Dîner'},{n:'Amandes',q:'200g',w:'Collation'},{n:"Huile d'olive",q:'1 bouteille',w:'Cuisson'},{n:'Miel',q:'1 pot',w:'Shakes'}]},
   {cat:'Compléments',bc:'#B8A0F8',items:[{n:'Whey protéine',q:'1kg',w:'+25g P'},{n:'Créatine 5g/jour',q:'500g',w:'Force+masse'},{n:'Vitamine D3',q:'1 boîte',w:'Carence'},{n:'Oméga-3',q:'1 boîte',w:'Récup'}]},
   {cat:'Légumes',bc:'#8BE8C8',items:[{n:'Épinards',q:'500g',w:'Shakes'},{n:'Brocolis',q:'400g',w:'Repas'},{n:'Tomates cerises',q:'250g',w:'Vitamines'},{n:'Courgettes',q:'2-3',w:'Digeste'}]},
@@ -679,18 +688,40 @@ function checkOnboard(){
     document.getElementById('onboard').style.display='flex'
   }
 }
+function validateObEmail(){
+  const el=document.getElementById('ob-email')
+  const err=document.getElementById('ob-email-err')
+  if(!el||!err)return true
+  const v=el.value.trim()
+  const valid=!v||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+  el.style.borderColor=v?(valid?'var(--accent)':'#F06080'):'var(--border2)'
+  err.style.display=(v&&!valid)?'block':'none'
+  return valid
+}
 function finishOnboard(){
   const name=document.getElementById('ob-name').value.trim()
   const email=document.getElementById('ob-email').value.trim()
   const weight=parseFloat(document.getElementById('ob-weight').value)
   const goal=parseFloat(document.getElementById('ob-goal').value)
-  if(!name)return
+  if(!name){
+    const ni=document.getElementById('ob-name');if(ni)ni.style.borderColor='#F06080'
+    return
+  }
+  if(!email){
+    const ei=document.getElementById('ob-email');if(ei)ei.style.borderColor='#F06080'
+    const err=document.getElementById('ob-email-err');if(err){err.textContent='L\'email est obligatoire';err.style.display='block'}
+    return
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    validateObEmail()
+    return
+  }
   ST.name=name
-  if(email)ST.email=email
+  ST.email=email
   if(!isNaN(goal)&&goal>30)ST.weightGoal=goal
   if(!isNaN(weight)&&weight>30){
     const date=new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})
-    ST.weights=[{v:weight,date}]  // repart de zéro
+    ST.weights=[{v:weight,date}]
   }
   persist()
   document.getElementById('onboard').style.display='none'
@@ -727,7 +758,66 @@ function _startNotifInterval(){
       new Notification('Vision. ⚡',{body:"Heure de la muscu ! Change-toi avant de t'asseoir.",icon:'V..png'})
     if(ST.notifs.water.on&&ST.notifs.water.time===hm)
       new Notification('Vision. 💧',{body:"Rappel hydratation — bois un verre d'eau.",icon:'V..png'})
+    // Notification ongles automatique à 21h00 chaque soir
+    if(hm==='21:00'){
+      const todayIdx=new Date().getDay()
+      // Enregistre qu'on a envoyé la notif aujourd'hui
+      const nailNotifKey=`v3_nail_notif_${tk}`
+      if(!load(nailNotifKey,false)){
+        sv(nailNotifKey,true)
+        if(Notification.permission==='granted')
+          new Notification('Vision. 💅',{body:'Tu t\'es rongé les ongles aujourd\'hui ?',icon:'V..png'})
+        // Marque le popup à afficher au prochain focus de l'app
+        sv('v3_nail_popup',true)
+      }
+    }
   },60000)
+}
+
+// ── POPUP ONGLES ──────────────────────────────────────────────────────────────
+let _nailPopupActive=false
+function checkNailPopup(){
+  if(_nailPopupActive)return
+  if(!load('v3_nail_popup',false))return
+  _nailPopupActive=true
+  sv('v3_nail_popup',false)
+  const el=document.createElement('div')
+  el.id='nail-popup'
+  el.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px'
+  el.innerHTML=`<div style="background:var(--bg2);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;text-align:center;border:0.5px solid var(--border2)">
+    <div style="font-size:40px;margin-bottom:12px">💅</div>
+    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px">Tes ongles aujourd'hui ?</div>
+    <div style="font-size:13px;color:var(--text3);margin-bottom:24px;line-height:1.5">Tu t'es rongé les ongles aujourd'hui ?</div>
+    <div style="display:flex;gap:10px">
+      <button onclick="answerNailPopup(false)" style="flex:1;padding:14px;background:rgba(252,255,59,.12);border:1px solid var(--accent);border-radius:12px;color:var(--accent);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer">NON ✅<br><span style="font-size:10px;font-family:'DM Mono',monospace;opacity:.7">STREAK OK</span></button>
+      <button onclick="answerNailPopup(true)" style="flex:1;padding:14px;background:rgba(240,96,128,.12);border:1px solid #F06080;border-radius:12px;color:#F06080;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer">OUI ❌<br><span style="font-size:10px;font-family:'DM Mono',monospace;opacity:.7">STREAK BRISÉ</span></button>
+    </div>
+  </div>`
+  document.body.appendChild(el)
+}
+function answerNailPopup(didBite){
+  const todayIdx=new Date().getDay()
+  ST.nailStreak.days=ST.nailStreak.days||{}
+  if(!didBite){
+    // N'a pas rongé → coche le jour
+    ST.nailStreak.days[todayIdx]=true
+  } else {
+    // A rongé → marque comme échoué (false = case rouge)
+    ST.nailStreak.days[todayIdx]=false
+  }
+  // Recalcule le streak (jours consécutifs vrais)
+  let count=0
+  const labels=[0,1,2,3,4,5,6]
+  for(let i=todayIdx;i>=0;i--){
+    if(ST.nailStreak.days[i]===true)count++
+    else break
+  }
+  ST.nailStreak.count=count
+  persist()
+  const el=document.getElementById('nail-popup')
+  if(el)el.remove()
+  _nailPopupActive=false
+  if(ST.screen==='home')renderHome()
 }
 
 // ── TIMER ─────────────────────────────────────────────────────────────────────
@@ -844,7 +934,7 @@ function renderHome(){
     <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px">
       <span class="weight-num">${cw?cw.v:'—'}</span>
       <span style="font-size:16px;color:var(--text3);font-family:'DM Mono',monospace">kg</span>
-      ${delta!==null?`<span class="weight-delta" style="background:${delta>=0?'rgba(200,240,74,.15)':'rgba(240,96,128,.15)'};color:${delta>=0?'var(--accent)':'#F06080'}">${delta>=0?'+':''}${delta.toFixed(1)}kg</span>`:''}
+      ${delta!==null?`<span class="weight-delta" style="background:${delta>=0?'rgba(252,255,59,.15)':'rgba(240,96,128,.15)'};color:${delta>=0?'var(--accent)':'#F06080'}">${delta>=0?'+':''}${delta.toFixed(1)}kg</span>`:''}
     </div>
     ${cw?`<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">${startW.toFixed(1)} → ${wGoal}kg</span><span style="font-size:10px;color:var(--accent);font-family:'DM Mono',monospace">${ob65pct}%</span></div>
     <div class="xpbar" style="height:5px;margin-bottom:10px"><div class="xpfill" style="width:${ob65pct}%;background:var(--accent)"></div></div>`:''}
@@ -923,7 +1013,7 @@ function renderHome(){
         <button onclick="_libOpen=false;r()" style="background:var(--bg4);border:none;border-radius:100px;width:30px;height:30px;color:var(--text);font-size:16px;cursor:pointer">×</button>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        ${PILIERS_LIB.map(p=>{const active=ST.mods.some(m=>m.id===p.id);return`<div onclick="toggleLibMod('${p.id}')" style="background:${active?'rgba(200,240,74,.12)':'var(--bg3)'};border:0.5px solid ${active?'var(--accent)':'var(--border)'};border-radius:12px;padding:12px 10px;cursor:pointer;transition:all .2s">
+        ${PILIERS_LIB.map(p=>{const active=ST.mods.some(m=>m.id===p.id);return`<div onclick="toggleLibMod('${p.id}')" style="background:${active?'rgba(252,255,59,.12)':'var(--bg3)'};border:0.5px solid ${active?'var(--accent)':'var(--border)'};border-radius:12px;padding:12px 10px;cursor:pointer;transition:all .2s">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
             <span style="font-size:20px">${MOD_EMOJI[p.id]||'⭐'}</span>
             <span style="font-size:11px;font-weight:700;color:${active?'var(--accent)':'var(--text3)'};font-family:'DM Mono',monospace">${active?'ON':'+'}</span>
@@ -1011,7 +1101,7 @@ function renderRoutine(){
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
           <div><div class="tln">${ri.label}</div>${ri.note?`<div class="tls">${ri.note}</div>`:''}</div>
           <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-            <span style="font-size:9px;color:${ST.rchecks[`${ST.routineTab}_${i}`]?'rgba(200,240,74,.6)':'var(--text3)'};font-family:'DM Mono',monospace;font-weight:600">+${ri.xp}</span>
+            <span style="font-size:9px;color:${ST.rchecks[`${ST.routineTab}_${i}`]?'rgba(252,255,59,.6)':'var(--text3)'};font-family:'DM Mono',monospace;font-weight:600">+${ri.xp}</span>
             <div class="cb">${ST.rchecks[`${ST.routineTab}_${i}`]?CHK:''}</div>
           </div>
         </div>
@@ -1114,7 +1204,7 @@ function renderAlim(){
       <div class="mc"><div class="mv">80g</div><div class="ml">LIPIDES</div></div>
     </div>
     <div class="slabel">RÉPARTITION JOURNÉE</div>
-    <div class="card">${[{t:'6h20',l:'Petit-déjeuner',k:'700',c:'#F0A050'},{t:'10h00',l:'Shake #1',k:'420',c:'#5BB8F5'},{t:'12h30',l:'Déjeuner',k:'750',c:'#8BE8C8'},{t:'15h30',l:'Shake #2',k:'390',c:'#5BB8F5'},{t:'18h30',l:'Pré-workout',k:'200',c:'#F06080'},{t:'19h25',l:'Recovery shake',k:'200',c:'#B8A0F8'},{t:'20h00',l:'Dîner',k:'650',c:'#C8F04A'},{t:'21h30',l:'Casein (si faim)',k:'200',c:'#444'}].map((r,i,a)=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;${i<a.length-1?'border-bottom:0.5px solid var(--border)':''}">
+    <div class="card">${[{t:'6h20',l:'Petit-déjeuner',k:'700',c:'#F0A050'},{t:'10h00',l:'Shake #1',k:'420',c:'#5BB8F5'},{t:'12h30',l:'Déjeuner',k:'750',c:'#8BE8C8'},{t:'15h30',l:'Shake #2',k:'390',c:'#5BB8F5'},{t:'18h30',l:'Pré-workout',k:'200',c:'#F06080'},{t:'19h25',l:'Recovery shake',k:'200',c:'#B8A0F8'},{t:'20h00',l:'Dîner',k:'650',c:'#FCFF3B'},{t:'21h30',l:'Casein (si faim)',k:'200',c:'#444'}].map((r,i,a)=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 0;${i<a.length-1?'border-bottom:0.5px solid var(--border)':''}">
       <span style="font-size:9px;color:var(--text3);width:36px;flex-shrink:0;font-family:'DM Mono',monospace">${r.t}</span>
       <span style="font-size:13px;color:var(--text2);flex:1">${r.l}</span>
       <span style="font-size:10px;font-weight:700;color:${r.c};font-family:'DM Mono',monospace">${r.k} kcal</span>
@@ -1157,10 +1247,10 @@ function renderAlim(){
       </div>
       <div style="display:flex;gap:6px;align-items:center">
         <input id="ci-name-${ci}" placeholder="+ Ajouter un article" onkeydown="if(event.key==='Enter')addCourseItem(${ci})"
-          style="flex:1;background:var(--bg3);border:0.5px dashed rgba(200,240,74,.3);border-radius:var(--r);padding:7px 10px;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;outline:none"/>
+          style="flex:1;background:var(--bg3);border:0.5px dashed rgba(252,255,59,.3);border-radius:var(--r);padding:7px 10px;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;outline:none"/>
         <input id="ci-qty-${ci}" placeholder="Qté" onkeydown="if(event.key==='Enter')addCourseItem(${ci})"
-          style="width:52px;background:var(--bg3);border:0.5px dashed rgba(200,240,74,.3);border-radius:var(--r);padding:7px 8px;color:var(--text);font-size:11px;font-family:'DM Mono',monospace;outline:none;text-align:center"/>
-        <button onclick="addCourseItem(${ci})" style="width:30px;height:30px;border-radius:6px;background:rgba(200,240,74,.15);border:0.5px solid rgba(200,240,74,.3);cursor:pointer;color:var(--accent);font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0">+</button>
+          style="width:52px;background:var(--bg3);border:0.5px dashed rgba(252,255,59,.3);border-radius:var(--r);padding:7px 8px;color:var(--text);font-size:11px;font-family:'DM Mono',monospace;outline:none;text-align:center"/>
+        <button onclick="addCourseItem(${ci})" style="width:30px;height:30px;border-radius:6px;background:rgba(252,255,59,.15);border:0.5px solid rgba(252,255,59,.3);cursor:pointer;color:var(--accent);font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0">+</button>
       </div>
     </div>`).join('')}
     ${cdone>0?`<button class="copy-btn" id="copy-btn" onclick="copyCourses()">📋 COPIER POUR NOTES (${cdone} articles)</button>`:''}`
@@ -1184,18 +1274,18 @@ function renderHist(){
     const isToday=d===0
     let bg
     if(score===0)bg='var(--bg4)'
-    else if(pct<0.3)bg='rgba(200,240,74,0.2)'
-    else if(pct<0.6)bg='rgba(200,240,74,0.5)'
-    else if(pct<0.9)bg='rgba(200,240,74,0.8)'
+    else if(pct<0.3)bg='rgba(252,255,59,0.2)'
+    else if(pct<0.6)bg='rgba(252,255,59,0.5)'
+    else if(pct<0.9)bg='rgba(252,255,59,0.8)'
     else bg='var(--accent)'
     cells.push({bg,score,label:dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}),isToday})
   }
   const heatHtml=`<div class="heatmap">${cells.map(c=>`<div class="hm-cell" style="background:${c.bg};${c.isToday?'border:1.5px solid var(--accent)':''}" title="${c.label}: ${c.score} XP"></div>`).join('')}</div>
   <div style="display:flex;gap:6px;align-items:center;margin-bottom:16px;font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">
     <div style="width:10px;height:10px;border-radius:2px;background:var(--bg4)"></div><span>0</span>
-    <div style="width:10px;height:10px;border-radius:2px;background:rgba(200,240,74,0.3)"></div><span>&lt;30%</span>
-    <div style="width:10px;height:10px;border-radius:2px;background:rgba(200,240,74,0.6)"></div><span>&lt;60%</span>
-    <div style="width:10px;height:10px;border-radius:2px;background:rgba(200,240,74,0.9)"></div><span>&lt;90%</span>
+    <div style="width:10px;height:10px;border-radius:2px;background:rgba(252,255,59,0.3)"></div><span>&lt;30%</span>
+    <div style="width:10px;height:10px;border-radius:2px;background:rgba(252,255,59,0.6)"></div><span>&lt;60%</span>
+    <div style="width:10px;height:10px;border-radius:2px;background:rgba(252,255,59,0.9)"></div><span>&lt;90%</span>
     <div style="width:10px;height:10px;border-radius:2px;background:var(--accent)"></div><span>100%</span>
   </div>`
 
@@ -1205,7 +1295,7 @@ function renderHist(){
     <div style="display:flex;align-items:flex-end;gap:4px;height:80px;margin-bottom:8px">
       ${(()=>{const ws=ST.weights.slice(-14);const min=Math.min(...ws.map(w=>w.v))-1;const max=Math.max(...ws.map(w=>w.v))+1;const range=max-min||1
       return ws.map((w,i)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px">
-        <div style="width:100%;background:${i===ws.length-1?'var(--accent)':'rgba(200,240,74,0.4)'};border-radius:2px 2px 0 0;height:${Math.round(((w.v-min)/range)*70)+5}px"></div>
+        <div style="width:100%;background:${i===ws.length-1?'var(--accent)':'rgba(252,255,59,0.4)'};border-radius:2px 2px 0 0;height:${Math.round(((w.v-min)/range)*70)+5}px"></div>
         <div style="font-size:7px;color:var(--text3);font-family:'DM Mono',monospace">${w.date}</div>
       </div>`).join('')})()}
     </div>
@@ -1247,45 +1337,93 @@ function renderHist(){
 
 // ── RENDER DASH ───────────────────────────────────────────────────────────────
 function renderDash(){
-  const earned=xpToday(),totalXp=computeTotalXp(),lvl=getLevel(totalXp)
-  const week=[{n:'Sommeil',p:85,c:'#B8A0F8'},{n:'Mindset',p:90,c:'#F472B6'},{n:'Focus',p:60,c:'#8BE8C8'},{n:'Lecture',p:75,c:'#F0A050'},{n:'Méditation',p:65,c:'#8BE8C8'},{n:'Hydratation',p:80,c:'#5BB8F5'},{n:'Finance',p:40,c:'#C8F04A'},{n:'Masse',p:30,c:'#B8A0F8'}]
-  const avg=Math.round(week.reduce((a,w)=>a+w.p,0)/week.length)
-  const objs=[{l:'Prise de masse',t:'59→65kg (+0.3kg/sem)',p:8,c:'#B8A0F8'},{l:'Course à pied',t:'5km sans arrêt',p:12,c:'#8BE8C8'},{l:'Lecture',t:'6 livres (1/15j)',p:33,c:'#F0A050'},{l:'Épargne',t:'30% revenus/mois',p:50,c:'#C8F04A'},{l:'Ongles',t:'90j sans ronger',p:Math.round((ST.nailStreak.count/90)*100),c:'#F472B6'}]
-  const bdone=['🌙 Première nuit parfaite','⚡ Première séance','💧 Hydraté 7 jours','📖 Premier livre']
-  const bnext=[{ic:'🔥',l:'Streak 7 jours',p:'4/7',pct:57},{ic:'🏆',l:'10 séances',p:'2/10',pct:20},{ic:'🧠',l:'21j journal',p:'4/21',pct:19},{ic:'💪',l:'+2kg masse',p:'0/2',pct:5},{ic:'💅',l:'Ongles 30j',p:`${ST.nailStreak.count}/30`,pct:Math.min(Math.round((ST.nailStreak.count/30)*100),100)}]
+  const totalXp=computeTotalXp(),lvl=getLevel(totalXp)
+  const streak=calcStreak()
+  const sportSessions=Object.keys(ST.sportHist).length
+  const nailCount=ST.nailStreak.count
+
+  // Piliers réels (taux de completion aujourd'hui)
+  const week=ST.mods.map(m=>({n:m.name,p:modPct(m.id),c:m.color}))
+  const avg=week.length>0?Math.round(week.reduce((a,w)=>a+w.p,0)/week.length):0
+
+  // Objectifs calculés depuis les vraies données
+  const wCurrent=ST.weights.length?ST.weights[ST.weights.length-1].v:null
+  const wStart=ST.weights.length?ST.weights[0].v:null
+  const objs=[]
+  if(wCurrent!==null&&wStart!==null&&ST.weightGoal){
+    const wRange=ST.weightGoal-wStart||1
+    const wPct=Math.min(Math.max(Math.round(((wCurrent-wStart)/wRange)*100),0),100)
+    objs.push({l:'Objectif de poids',t:`${wStart}kg → ${ST.weightGoal}kg (actuel : ${wCurrent}kg)`,p:wPct,c:'#B8A0F8'})
+  }
+  objs.push({l:'Streak journalier',t:`${streak} jour${streak>1?'s':''} consécutifs (objectif 30j)`,p:Math.min(Math.round((streak/30)*100),100),c:'#F0A050'})
+  objs.push({l:'Streak ongles 90j',t:`${nailCount}/90 jours sans ronger`,p:Math.min(Math.round((nailCount/90)*100),100),c:'#F472B6'})
+  objs.push({l:'Séances sport',t:`${sportSessions}/30 séances effectuées`,p:Math.min(Math.round((sportSessions/30)*100),100),c:'#8BE8C8'})
+
+  // Badges débloqués sur vraies données uniquement
+  const bdone=[]
+  if(totalXp>0)bdone.push('⚡ Compte activé')
+  if(streak>=3)bdone.push('🔥 3 jours de streak')
+  if(streak>=7)bdone.push('🏆 7 jours de streak')
+  if(streak>=30)bdone.push('💎 30 jours de streak')
+  if(sportSessions>=1)bdone.push('💪 Première séance sport')
+  if(sportSessions>=10)bdone.push('🏋️ 10 séances sport')
+  if(nailCount>=7)bdone.push('💅 Ongles 7 jours')
+  if(nailCount>=30)bdone.push('💅 Ongles 30 jours')
+  if(nailCount>=90)bdone.push('👑 Ongles 90 jours')
+  if(ST.mods.some(m=>modPct(m.id)===100))bdone.push('🌟 Module complet')
+  if(totalXp>=500)bdone.push('⭐ 500 XP')
+  if(totalXp>=1500)bdone.push('⭐⭐ 1500 XP')
+  if(totalXp>=5000)bdone.push('⭐⭐⭐ 5000 XP')
+
+  // Prochains badges (uniquement ceux non encore atteints)
+  const allBadges=[
+    {ic:'🔥',l:'Streak 7 jours',cur:streak,total:7},
+    {ic:'🔥',l:'Streak 30 jours',cur:streak,total:30},
+    {ic:'💪',l:'10 séances sport',cur:sportSessions,total:10},
+    {ic:'💪',l:'30 séances sport',cur:sportSessions,total:30},
+    {ic:'💅',l:'Ongles 30 jours',cur:nailCount,total:30},
+    {ic:'💅',l:'Ongles 90 jours',cur:nailCount,total:90},
+    {ic:'⭐',l:'500 XP',cur:totalXp,total:500},
+    {ic:'⭐',l:'1500 XP',cur:totalXp,total:1500},
+    {ic:'⭐',l:'5000 XP',cur:totalXp,total:5000},
+  ]
+  const bnext=allBadges.filter(b=>b.cur<b.total).slice(0,5)
+    .map(b=>({...b,p:`${Math.min(b.cur,b.total)}/${b.total}`,pct:Math.round((b.cur/b.total)*100)}))
+
   document.getElementById('s-dash').innerHTML=`
-  <div class="topbar"><div><div class="accent-line"></div><div class="app-name" style="font-size:22px">Stats</div></div><div class="topbar-meta">BILAN<br>SEMAINE</div></div>
+  <div class="topbar"><div><div class="accent-line"></div><div class="app-name" style="font-size:22px">Stats</div></div><div class="topbar-meta">DONNÉES<br>RÉELLES</div></div>
   <div class="card" style="text-align:center;margin-bottom:16px">
     <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:4px">NIVEAU ACTUEL</div>
     <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--accent)">${lvl.num}. ${lvl.name}</div>
     <div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px">${totalXp} XP total${lvl.next?` · ${lvl.next-totalXp} XP vers NIV.${lvl.num+1}`:' · MAX 🏆'}</div>
   </div>
   <div class="mg2">
-    <div class="mc"><div class="mv">${avg}%</div><div class="ml">SCORE SEMAINE</div></div>
-    <div class="mc"><div class="mv">${calcStreak()} 🔥</div><div class="ml">STREAK</div></div>
+    <div class="mc"><div class="mv">${avg}%</div><div class="ml">SCORE JOUR</div></div>
+    <div class="mc"><div class="mv">${streak} 🔥</div><div class="ml">STREAK</div></div>
     <div class="mc"><div class="mv">NIV.${lvl.num}</div><div class="ml">${lvl.name.toUpperCase()}</div></div>
     <div class="mc"><div class="mv">${totalXp}</div><div class="ml">XP TOTAL</div></div>
   </div>
-  <div class="slabel">PILIERS — CETTE SEMAINE</div>
-  <div class="card" style="margin-bottom:16px">${week.map(w=>`<div class="wbr"><span class="wbl">${w.n}</span><div class="wb"><div class="wbf" style="width:${w.p}%;background:${w.c}"></div></div><span class="wbv">${w.p}%</span></div>`).join('')}</div>
-  <div class="slabel">OBJECTIFS 90 JOURS</div>
+  <div class="slabel">PILIERS — AUJOURD'HUI</div>
+  <div class="card" style="margin-bottom:16px">${week.length>0?week.map(w=>`<div class="wbr"><span class="wbl" style="font-size:10px">${w.n}</span><div class="wb"><div class="wbf" style="width:${w.p}%;background:${w.c}"></div></div><span class="wbv">${w.p}%</span></div>`).join(''):'<div style="font-size:12px;color:var(--text3);text-align:center;padding:8px">Active des piliers pour voir ta progression</div>'}</div>
+  <div class="slabel">OBJECTIFS EN COURS</div>
   <div class="card" style="margin-bottom:16px">${objs.map((o,i)=>`<div style="${i<objs.length-1?'margin-bottom:14px':''}">
     <div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:13px;font-weight:500">${o.l}</span><span style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">${o.p}%</span></div>
     <div style="font-size:11px;color:var(--text3);margin-bottom:6px">${o.t}</div>
     <div class="xpbar"><div class="xpfill" style="width:${o.p}%;background:${o.c}"></div></div>
   </div>`).join('')}</div>
   <div class="slabel">BADGES DÉBLOQUÉS</div>
-  <div style="margin-bottom:16px">${bdone.map(b=>`<span class="badge">${b}</span>`).join('')}</div>
+  <div style="margin-bottom:16px">${bdone.length>0?bdone.map(b=>`<span class="badge">${b}</span>`).join(''):'<span style="font-size:12px;color:var(--text3);font-family:\'DM Mono\',monospace">Aucun badge encore — commence ta routine !</span>'}</div>
   <div class="slabel">PROCHAINS BADGES</div>
-  <div class="card">${bnext.map((b,i)=>`<div class="next-badge"${i===bnext.length-1?' style="border:none;margin:0;padding:0"':''}>
+  <div class="card">${bnext.length>0?bnext.map((b,i)=>`<div class="next-badge"${i===bnext.length-1?' style="border:none;margin:0;padding:0"':''}>
     <span style="font-size:20px;width:32px;text-align:center">${b.ic}</span>
     <div style="flex:1">
       <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px;font-weight:500">${b.l}</span><span style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">${b.p}</span></div>
       <div class="xpbar"><div class="xpfill" style="width:${b.pct}%;background:#B8A0F8"></div></div>
     </div>
-  </div>`).join('')}</div>
+  </div>`).join(''):'<div style="font-size:12px;color:var(--accent);text-align:center;padding:8px;font-family:\'DM Mono\',monospace">🏆 TOUS LES BADGES DÉBLOQUÉS !</div>'}</div>
   <div style="margin-top:32px;padding-top:20px;border-top:0.5px solid var(--border)">
     <div class="slabel">COMPTE</div>
+    ${ST.email?`<div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:10px">📧 ${ST.email}</div>`:''}
     ${_resetStep===0
       ? `<button onclick="resetAccount()" style="width:100%;padding:12px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);color:var(--text3);font-size:11px;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.05em">
           🗑 RÉINITIALISER MON COMPTE
@@ -1441,7 +1579,11 @@ function r(){
 checkOnboard()
 // Démarre l'interval de notifications si permission déjà accordée (session précédente)
 if(typeof Notification!=='undefined'&&Notification.permission==='granted')_startNotifInterval()
+// Vérifie le popup ongles au focus de la fenêtre (retour après notification)
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkNailPopup()})
 r()
+// Vérifie au chargement initial aussi
+setTimeout(checkNailPopup,500)
 </script>
 </body>
 </html>
