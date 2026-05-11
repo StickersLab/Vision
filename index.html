@@ -9,6 +9,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Vision.</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -233,16 +234,31 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 </style>
 </head>
 <body>
+<!-- Écran de chargement Supabase -->
+<div id="sb-loading" style="position:fixed;inset:0;background:#1A0F3C;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px">
+  <img src="V..png" width="60" height="60" style="border-radius:12px;opacity:.85"/>
+  <div style="font-size:10px;color:rgba(240,237,232,.35);font-family:'DM Mono',monospace;letter-spacing:.14em">CHARGEMENT…</div>
+</div>
+
 <div id="onboard" class="onboard" style="display:none">
   <img src="V..png" width="80" height="80" style="border-radius:16px;object-fit:contain;margin-bottom:16px"/>
   <h1>Vision.</h1>
-  <p>Ton lifestyle OS personnel.<br/>Commence par te présenter.</p>
-  <input id="ob-name" placeholder="Ton prénom" maxlength="20"/>
-  <input id="ob-email" type="email" placeholder="Ton email" maxlength="80" oninput="validateObEmail()" style="border-color:var(--border2)"/>
+  <p id="ob-desc">Ton lifestyle OS personnel.<br/>Commence par te présenter.</p>
+  <!-- Champs inscription uniquement -->
+  <div id="ob-signup-extra">
+    <input id="ob-name" placeholder="Ton prénom" maxlength="20"/>
+    <input id="ob-weight" type="number" placeholder="Poids actuel (kg) — ex: 72" step="0.1"/>
+    <input id="ob-goal" type="number" placeholder="Objectif de poids (kg) — ex: 80" step="0.5"/>
+  </div>
+  <!-- Email + password (toujours visibles) -->
+  <input id="ob-email" type="email" placeholder="Ton email" maxlength="80" oninput="validateObEmail()"/>
   <div id="ob-email-err" style="display:none;font-size:11px;color:#F06080;font-family:'DM Mono',monospace;margin-top:-6px;margin-bottom:4px;text-align:center">Email invalide — ex: prenom@gmail.com</div>
-  <input id="ob-weight" type="number" placeholder="Poids actuel (kg) — ex: 72" step="0.1"/>
-  <input id="ob-goal" type="number" placeholder="Objectif de poids (kg) — ex: 80" step="0.5"/>
-  <button onclick="finishOnboard()">COMMENCER →</button>
+  <input id="ob-password" type="password" placeholder="Mot de passe (min 6 caractères)" style="letter-spacing:.05em"/>
+  <div id="ob-pw-err" style="display:none;font-size:11px;color:#F06080;font-family:'DM Mono',monospace;margin-top:-6px;margin-bottom:4px;text-align:center">Minimum 6 caractères requis</div>
+  <!-- Message d'erreur auth -->
+  <div id="ob-error" style="display:none;font-size:12px;color:#F06080;font-family:'DM Mono',monospace;text-align:center;padding:10px;background:rgba(240,96,128,.1);border-radius:8px;line-height:1.5"></div>
+  <button id="ob-btn" onclick="finishOnboard()">COMMENCER →</button>
+  <button id="ob-mode-btn" onclick="toggleObMode()" style="background:none;border:none;color:var(--text3);margin-top:6px;cursor:pointer;font-size:11px;font-family:'DM Mono',monospace;text-decoration:underline;padding:4px">J'ai déjà un compte → Se connecter</button>
 </div>
 
 <div class="app">
@@ -327,6 +343,78 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 <script>
 // ── AUDIO ────────────────────────────────────────────────────────────────────
 let AC=null;try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}
+
+// ── SUPABASE ──────────────────────────────────────────────────────────────────
+const SUPA_URL='https://fsccewhooevamkbaypjq.supabase.co'
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzY2Nld2hvb2V2YW1rYmF5cGpxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MDg2NjYsImV4cCI6MjA5NDA4NDY2Nn0.gI_wxinq7pYPLJbbin_wRyup2m1n4qLSZ-iRLd6gYNE'
+let _sb=null,_sbUser=null,_syncTimer=null
+try{_sb=window.supabase.createClient(SUPA_URL,SUPA_KEY)}catch(e){console.warn('Supabase unavailable:',e)}
+
+// Collecte toutes les clés v3_ du localStorage dans un objet
+function _snapLocalStorage(){
+  const snap={}
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);if(k&&k.startsWith('v3_'))snap[k]=localStorage.getItem(k)
+  }
+  return snap
+}
+
+// Sync vers Supabase (debounced, fire-and-forget)
+async function syncToSB(){
+  if(!_sb||!_sbUser)return
+  try{
+    await _sb.from('vision_data').upsert({user_id:_sbUser.id,data:_snapLocalStorage(),updated_at:new Date().toISOString()})
+  }catch(e){}
+}
+function debouncedSync(){
+  if(_syncTimer)clearTimeout(_syncTimer)
+  _syncTimer=setTimeout(syncToSB,2500)
+}
+
+// Charge les données depuis Supabase et recharge la page
+async function loadFromSB(){
+  if(!_sb||!_sbUser)return false
+  if(sessionStorage.getItem('sb_loaded'))return false  // déjà chargé après reload
+  try{
+    const {data}=await _sb.from('vision_data').select('data').eq('user_id',_sbUser.id).single()
+    if(data?.data&&Object.keys(data.data).length>0){
+      sessionStorage.setItem('sb_loaded','1')
+      Object.entries(data.data).forEach(([k,v])=>localStorage.setItem(k,v))
+      window.location.reload()
+      return true
+    } else {
+      // Premier login — pousse les données locales vers Supabase
+      await syncToSB()
+    }
+  }catch(e){}
+  return false
+}
+
+// Auth : inscription
+async function sbSignUp(email,password){
+  if(!_sb)return{error:'Connexion Supabase indisponible'}
+  const{data,error}=await _sb.auth.signUp({email,password})
+  if(!error&&data.user)_sbUser=data.user
+  return{data,error:error?.message}
+}
+
+// Auth : connexion
+async function sbLogin(email,password){
+  if(!_sb)return{error:'Connexion Supabase indisponible'}
+  const{data,error}=await _sb.auth.signInWithPassword({email,password})
+  if(!error&&data.user)_sbUser=data.user
+  return{data,error:error?.message}
+}
+
+// Auth : déconnexion (efface localStorage + reload)
+async function sbLogout(){
+  if(_sb)try{await _sb.auth.signOut()}catch(e){}
+  _sbUser=null
+  for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i);if(k&&k.startsWith('v3_'))localStorage.removeItem(k)}
+  sessionStorage.removeItem('sb_loaded')
+  window.location.reload()
+}
+
 function beep(freq=880, dur=0.15, type='sine'){
   try{
     if(!AC)return
@@ -624,6 +712,7 @@ function persist(){
   sv('v3_weights',ST.weights);sv('v3_wgoal',ST.weightGoal)
   sv('v3_nail',ST.nailStreak);sv('v3_notifs',ST.notifs)
   sv('v3_scores',ST.scores);sv('v3_xphist',ST.xpHistory)
+  debouncedSync()
 }
 
 function modPct(id){
@@ -684,46 +773,101 @@ function weightDelta(){
 
 // ── ONBOARDING ────────────────────────────────────────────────────────────────
 function checkOnboard(){
-  if(!ST.name){
-    document.getElementById('onboard').style.display='flex'
-  }
+  if(!ST.name)document.getElementById('onboard').style.display='flex'
 }
 function validateObEmail(){
-  const el=document.getElementById('ob-email')
-  const err=document.getElementById('ob-email-err')
+  const el=document.getElementById('ob-email'),err=document.getElementById('ob-email-err')
   if(!el||!err)return true
   const v=el.value.trim()
-  const valid=!v||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+  const valid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
   el.style.borderColor=v?(valid?'var(--accent)':'#F06080'):'var(--border2)'
-  err.style.display=(v&&!valid)?'block':'none'
-  return valid
+  if(err)err.style.display=(v&&!valid)?'block':'none'
+  return valid&&v.length>0
 }
-function finishOnboard(){
-  const name=document.getElementById('ob-name').value.trim()
+function _obShowErr(msg){
+  const el=document.getElementById('ob-error');if(el){el.textContent=msg;el.style.display='block'}
+}
+function _obClearErr(){
+  const el=document.getElementById('ob-error');if(el)el.style.display='none'
+}
+
+let _obMode='signup'
+function toggleObMode(){
+  _obMode=_obMode==='signup'?'login':'signup'
+  const extra=document.getElementById('ob-signup-extra')
+  const desc=document.getElementById('ob-desc')
+  const btn=document.getElementById('ob-btn')
+  const modeBtn=document.getElementById('ob-mode-btn')
+  if(extra)extra.style.display=_obMode==='signup'?'':'none'
+  if(desc)desc.innerHTML=_obMode==='signup'?'Ton lifestyle OS personnel.<br/>Commence par te présenter.':'Bon retour ! Connecte-toi pour retrouver tes données.'
+  if(btn)btn.textContent=_obMode==='signup'?'COMMENCER →':'SE CONNECTER →'
+  if(modeBtn)modeBtn.textContent=_obMode==='signup'?"J'ai déjà un compte → Se connecter":"Pas encore de compte → S'inscrire"
+  _obClearErr()
+}
+
+async function finishOnboard(){
+  _obClearErr()
   const email=document.getElementById('ob-email').value.trim()
+  const password=document.getElementById('ob-password').value
+  const btn=document.getElementById('ob-btn')
+
+  // ── Mode connexion
+  if(_obMode==='login'){
+    if(!email||!validateObEmail()){_obShowErr('Email requis et valide.');return}
+    if(!password){_obShowErr('Mot de passe requis.');return}
+    if(btn){btn.textContent='CONNEXION…';btn.disabled=true}
+    const{error}=await sbLogin(email,password)
+    if(error){
+      if(btn){btn.textContent='SE CONNECTER →';btn.disabled=false}
+      _obShowErr(error.includes('Invalid')||error.includes('invalid')?'Email ou mot de passe incorrect.':error)
+      return
+    }
+    // Charge les données depuis Supabase (recharge la page si données trouvées)
+    const reloading=await loadFromSB()
+    if(!reloading){
+      document.getElementById('onboard').style.display='none'
+      r()
+    }
+    return
+  }
+
+  // ── Mode inscription
+  const name=document.getElementById('ob-name').value.trim()
   const weight=parseFloat(document.getElementById('ob-weight').value)
   const goal=parseFloat(document.getElementById('ob-goal').value)
   if(!name){
     const ni=document.getElementById('ob-name');if(ni)ni.style.borderColor='#F06080'
+    _obShowErr('Le prénom est requis.')
     return
   }
-  if(!email){
-    const ei=document.getElementById('ob-email');if(ei)ei.style.borderColor='#F06080'
-    const err=document.getElementById('ob-email-err');if(err){err.textContent='L\'email est obligatoire';err.style.display='block'}
+  if(!validateObEmail()){return}
+  if(!password||password.length<6){
+    const pi=document.getElementById('ob-password');if(pi)pi.style.borderColor='#F06080'
+    const pe=document.getElementById('ob-pw-err');if(pe)pe.style.display='block'
     return
   }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-    validateObEmail()
-    return
-  }
-  ST.name=name
-  ST.email=email
+  // Prépare les données locales
+  ST.name=name;ST.email=email
   if(!isNaN(goal)&&goal>30)ST.weightGoal=goal
   if(!isNaN(weight)&&weight>30){
     const date=new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})
     ST.weights=[{v:weight,date}]
   }
   persist()
+  if(btn){btn.textContent='CRÉATION…';btn.disabled=true}
+  const{error}=await sbSignUp(email,password)
+  if(error){
+    if(btn){btn.textContent='COMMENCER →';btn.disabled=false}
+    if(error.includes('already registered')||error.includes('already been registered')){
+      _obShowErr('Email déjà utilisé. Clique sur "J\'ai déjà un compte" pour te connecter.')
+    } else {
+      _obShowErr(error)
+    }
+    return
+  }
+  // Sync données locales vers Supabase
+  await syncToSB()
+  if(btn){btn.textContent='COMMENCER →';btn.disabled=false}
   document.getElementById('onboard').style.display='none'
   r()
 }
@@ -1423,7 +1567,10 @@ function renderDash(){
   </div>`).join(''):'<div style="font-size:12px;color:var(--accent);text-align:center;padding:8px;font-family:\'DM Mono\',monospace">🏆 TOUS LES BADGES DÉBLOQUÉS !</div>'}</div>
   <div style="margin-top:32px;padding-top:20px;border-top:0.5px solid var(--border)">
     <div class="slabel">COMPTE</div>
-    ${ST.email?`<div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:10px">📧 ${ST.email}</div>`:''}
+    ${ST.email?`<div style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:10px">📧 ${ST.email}${_sbUser?' · <span style="color:var(--accent)">✓ SYNC</span>':''}</div>`:''}
+    ${_sbUser?`<button onclick="sbLogout()" style="width:100%;padding:12px;background:rgba(252,255,59,.08);border:0.5px solid rgba(252,255,59,.3);border-radius:var(--r);color:var(--accent);font-size:11px;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.05em;margin-bottom:8px">
+      🔓 SE DÉCONNECTER
+    </button>`:''}
     ${_resetStep===0
       ? `<button onclick="resetAccount()" style="width:100%;padding:12px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);color:var(--text3);font-size:11px;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.05em">
           🗑 RÉINITIALISER MON COMPTE
@@ -1493,12 +1640,15 @@ function delCourseItem(ci,ii){
 let _resetStep=0
 function resetAccount(){
   if(_resetStep===0){_resetStep=1;renderDash();return}
-  // Efface toutes les clés v3_
+  // Efface toutes les clés v3_ en local
   for(let i=localStorage.length-1;i>=0;i--){
     const k=localStorage.key(i);if(k&&k.startsWith('v3_'))localStorage.removeItem(k)
   }
   localStorage.removeItem('v3_dark')
-  window.location.reload()
+  sessionStorage.removeItem('sb_loaded')
+  // Déconnecte de Supabase et recharge
+  if(_sb&&_sbUser){_sb.auth.signOut().then(()=>window.location.reload())}
+  else window.location.reload()
 }
 function toggleTheme(){
   isDark=!isDark;sv('v3_dark',isDark)
@@ -1575,15 +1725,32 @@ function r(){
   persist()
 }
 
-// Init
-checkOnboard()
-// Démarre l'interval de notifications si permission déjà accordée (session précédente)
+// Démarre les notifications si déjà accordées
 if(typeof Notification!=='undefined'&&Notification.permission==='granted')_startNotifInterval()
-// Vérifie le popup ongles au focus de la fenêtre (retour après notification)
+// Popup ongles au retour dans l'app
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkNailPopup()})
-r()
-// Vérifie au chargement initial aussi
-setTimeout(checkNailPopup,500)
+
+// ── INIT ASYNC ────────────────────────────────────────────────────────────────
+async function _init(){
+  const loadEl=document.getElementById('sb-loading')
+  // Vérifie session Supabase existante
+  if(_sb){
+    try{
+      const{data:{session}}=await _sb.auth.getSession()
+      if(session){
+        _sbUser=session.user
+        const reloading=await loadFromSB()
+        if(reloading)return  // page va recharger — on s'arrête ici
+      }
+    }catch(e){}
+  }
+  // Cache l'écran de chargement
+  if(loadEl)loadEl.style.display='none'
+  checkOnboard()
+  r()
+  setTimeout(checkNailPopup,500)
+}
+_init()
 </script>
 </body>
 </html>
