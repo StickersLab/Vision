@@ -6,6 +6,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#1A0F3C">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Vision.</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -236,6 +238,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
   <h1>Vision.</h1>
   <p>Ton lifestyle OS personnel.<br/>Commence par te présenter.</p>
   <input id="ob-name" placeholder="Ton prénom" maxlength="20"/>
+  <input id="ob-email" type="email" placeholder="Ton email (optionnel)" maxlength="80"/>
   <input id="ob-weight" type="number" placeholder="Poids actuel (kg) — ex: 72" step="0.1"/>
   <input id="ob-goal" type="number" placeholder="Objectif de poids (kg) — ex: 80" step="0.5"/>
   <button onclick="finishOnboard()">COMMENCER →</button>
@@ -436,6 +439,42 @@ const DEF_MODS=[
   {id:'finance',name:'Finance',color:'#C8F04A',ic:'finance',checks:["Budget de la semaine revu","Épargne virée","Dépenses vérifiées","Revenu side project tracké"],xps:[15,20,10,15]},
   {id:'mass',name:'Prise de masse',color:'#B8A0F8',ic:'mass',checks:["Pesée à jeun (lundi)","Excédent +400 kcal","Photo progression (lundi)","Mensurations (lundi)"],xps:[10,20,10,10]},
 ]
+
+// ── EMOJIS PILIERS ────────────────────────────────────────────────────────────
+const MOD_EMOJI={
+  sleep:'🌙',mind:'🧠',focus:'🎯',read:'📖',medite:'🧘',water:'💧',finance:'💰',mass:'💪',
+  smoke:'🚭',alcohol:'🍷',screen:'📵',network:'🤝',creativity:'🎨',speaking:'🗣️',
+  language:'🌍',spirit:'🙏',orga:'🧹',family:'❤️',care:'🧴',health:'💊',
+  project:'🚀',skills:'📊',balance:'🎮'
+}
+
+// ── BIBLIOTHÈQUE COMPLÈTE 23 PILIERS ─────────────────────────────────────────
+const PILIERS_LIB=[
+  {id:'sleep',name:'Sommeil',color:'#B8A0F8',ic:'sleep',checks:["Couché avant 22h30","Pas d'écran 45min avant","Réveil sans snooze à 5h30","Lumière naturelle 10min","7h30 de sommeil"],xps:[10,10,15,10,20]},
+  {id:'mind',name:'Mindset',color:'#F472B6',ic:'mind',checks:["3 intentions du jour","1 gratitude notée","Victoire du soir notée","Pas de spirale négative"],xps:[15,10,15,10]},
+  {id:'focus',name:'Focus',color:'#8BE8C8',ic:'focus',checks:["Tâche #1 identifiée","Téléphone hors de portée","Bloc 1 de 90min","Bloc 2 de 90min","Revue fin de journée"],xps:[10,10,40,40,10]},
+  {id:'read',name:'Lecture',color:'#F0A050',ic:'read',checks:["Session lecture 15min+","Pas de téléphone pendant","Note écrite après"],xps:[20,10,15]},
+  {id:'medite',name:'Méditation',color:'#8BE8C8',ic:'medite',checks:["Session 10min+ effectuée","Sans interruption","Ressenti noté"],xps:[25,15,10]},
+  {id:'water',name:'Hydratation',color:'#5BB8F5',ic:'water',checks:["Verre d'eau au réveil","1L avant midi","2L avant 17h","2.5L atteints"],xps:[10,10,15,15]},
+  {id:'finance',name:'Finance',color:'#C8F04A',ic:'finance',checks:["Budget de la semaine revu","Épargne virée","Dépenses vérifiées","Revenu side project tracké"],xps:[15,20,10,15]},
+  {id:'mass',name:'Prise de masse',color:'#B8A0F8',ic:'mass',checks:["Pesée à jeun (lundi)","Excédent +400 kcal","Photo progression (lundi)","Mensurations (lundi)"],xps:[10,20,10,10]},
+  {id:'smoke',name:'Stop tabac',color:'#F06080',ic:'smoke',checks:["0 cigarette aujourd'hui","Envie résistée","Alternative saine utilisée","Journée notée"],xps:[30,20,10,10]},
+  {id:'alcohol',name:'Stop alcool',color:'#F06080',ic:'alcohol',checks:["0 alcool aujourd'hui","Sortie sociale sans alcool","Alternative choisie","Journée notée"],xps:[30,15,10,10]},
+  {id:'screen',name:'Détox écrans',color:'#F472B6',ic:'screen',checks:["Pas de téléphone le matin 1h","Pas de réseaux après 21h","Temps écran < 2h","Soirée sans écran"],xps:[20,15,15,20]},
+  {id:'network',name:'Networking',color:'#8BE8C8',ic:'network',checks:["1 message envoyé à un contact","1 interaction LinkedIn","1 café/appel planifié","Suivi d'un contact"],xps:[15,10,20,15]},
+  {id:'creativity',name:'Créativité',color:'#F0A050',ic:'creativity',checks:["30min de création libre","Idée notée dans le carnet","Projet créatif avancé","Sans téléphone pendant"],xps:[20,10,25,10]},
+  {id:'speaking',name:'Prise de parole',color:'#C8F04A',ic:'speaking',checks:["1 prise de parole en public","Discours préparé","Feedback demandé","Enregistrement écouté"],xps:[25,15,15,10]},
+  {id:'language',name:'Langue étrangère',color:'#5BB8F5',ic:'language',checks:["15min de pratique","Duolingo ou app utilisée","1 contenu en langue cible","Vocabulaire noté"],xps:[15,10,15,10]},
+  {id:'spirit',name:'Spiritualité',color:'#B8A0F8',ic:'spirit',checks:["Temps de prière/méditation","Gratitude écrite","Lecture spirituelle","Déconnexion 30min nature"],xps:[15,10,15,20]},
+  {id:'orga',name:'Organisation',color:'#8BE8C8',ic:'orga',checks:["To-do liste faite le soir","Bureau rangé","Emails triés","Planning semaine revu"],xps:[10,10,10,20]},
+  {id:'family',name:'Famille',color:'#F472B6',ic:'family',checks:["Appel ou message à un proche","Moment qualité partagé","Écoute active pratiquée","Gratitude exprimée"],xps:[15,20,15,10]},
+  {id:'care',name:'Soins personnels',color:'#F0A050',ic:'care',checks:["Routine soin peau","Hygiène complète","Coiffure/apparence soignée","Tenue préparée la veille"],xps:[10,10,10,10]},
+  {id:'health',name:'Santé',color:'#8BE8C8',ic:'health',checks:["Médicaments/compléments pris","Rendez-vous médical planifié","Symptôme noté si besoin","Sommeil & stress évalués"],xps:[15,15,10,10]},
+  {id:'project',name:'Projet perso',color:'#C8F04A',ic:'project',checks:["1h sur le projet principal","Tâche clé avancée","Blocage identifié","Prochaine action notée"],xps:[30,20,10,10]},
+  {id:'skills',name:'Compétences',color:'#5BB8F5',ic:'skills',checks:["Formation ou tuto 30min","Note de synthèse écrite","Pratique appliquée","Progression évaluée"],xps:[20,10,20,10]},
+  {id:'balance',name:'Équilibre / Fun',color:'#F472B6',ic:'balance',checks:["Activité plaisir 30min","Sortie ou loisir planifié","Temps seul respecté","Rire ou détente consciente"],xps:[15,15,10,10]},
+]
+
 const DEF_ROUTINE={
   morning:[
     {time:'5h30',label:'Réveil sans snooze',note:'Téléphone hors de portée',xp:5},
@@ -542,6 +581,7 @@ if(!isDark)document.documentElement.classList.add('light')
 
 const ST={
   name:load('v3_name',''),
+  email:load('v3_email',''),
   mods:load('v3_mods',DEF_MODS),
   checks:load(`v3_chk_${tk}`,{}),
   routine:load('v3_rout',DEF_ROUTINE),
@@ -566,6 +606,7 @@ const ST={
 }
 
 function persist(){
+  sv('v3_name',ST.name);sv('v3_email',ST.email)
   sv('v3_mods',ST.mods);sv(`v3_chk_${tk}`,ST.checks)
   sv('v3_rout',ST.routine);sv(`v3_rc_${tk}`,ST.rchecks)
   sv(`v3_wat_${tk}`,ST.waters);sv(`v3_sport_${tk}`,ST.sportDone)
@@ -640,16 +681,18 @@ function checkOnboard(){
 }
 function finishOnboard(){
   const name=document.getElementById('ob-name').value.trim()
+  const email=document.getElementById('ob-email').value.trim()
   const weight=parseFloat(document.getElementById('ob-weight').value)
   const goal=parseFloat(document.getElementById('ob-goal').value)
   if(!name)return
   ST.name=name
+  if(email)ST.email=email
   if(!isNaN(goal)&&goal>30)ST.weightGoal=goal
   if(!isNaN(weight)&&weight>30){
     const date=new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})
     ST.weights=[{v:weight,date}]  // repart de zéro
   }
-  sv('v3_name',ST.name);persist()
+  persist()
   document.getElementById('onboard').style.display='none'
   r()
 }
@@ -743,6 +786,31 @@ function renderTimerOnly(){
   if(phase){phase.textContent=ST.timerPhase==='exo'?'EXERCICE ⚡':'PAUSE 😮‍💨';phase.className='timer-phase '+(ST.timerPhase==='exo'?'exo':'pause')}
 }
 
+// ── BIBLIOTHÈQUE PILIERS ──────────────────────────────────────────────────────
+let _libOpen=false
+function toggleLibMod(id){
+  const idx=ST.mods.findIndex(m=>m.id===id)
+  if(idx>=0){
+    // Désactiver : retirer du tableau actif
+    ST.mods.splice(idx,1)
+  } else {
+    // Activer : ajouter depuis la bibliothèque
+    const lib=PILIERS_LIB.find(p=>p.id===id)
+    if(lib)ST.mods.push({...lib})
+  }
+  persist()
+  r()
+}
+
+// ── OBJECTIF POIDS MODIFIABLE ─────────────────────────────────────────────────
+let _editingGoal=false
+function saveGoalEdit(){
+  const val=parseFloat(document.getElementById('goal-input').value)
+  if(!isNaN(val)&&val>30){ST.weightGoal=val;persist()}
+  _editingGoal=false
+  renderHome()
+}
+
 // ── RENDER HOME ───────────────────────────────────────────────────────────────
 function renderHome(){
   const earned=xpToday(),maxXp=maxXpDay()
@@ -761,7 +829,17 @@ function renderHome(){
   const weightCard=`<div class="weight-card">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
       <div class="slabel" style="margin:0">POIDS</div>
-      <span style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">OBJECTIF ${wGoal}KG</span>
+      ${_editingGoal
+        ?`<div style="display:flex;align-items:center;gap:4px">
+            <input id="goal-input" type="number" step="0.5" value="${wGoal}" style="width:70px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:3px 6px;outline:none"/>
+            <span style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace">kg</span>
+            <button onclick="saveGoalEdit()" style="background:var(--accent);color:#1A0F3C;border:none;border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;font-family:'DM Mono',monospace">✓</button>
+          </div>`
+        :`<div style="display:flex;align-items:center;gap:6px">
+            <span style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">OBJECTIF ${wGoal}KG</span>
+            <button onclick="_editingGoal=true;renderHome()" style="background:none;border:none;cursor:pointer;font-size:12px;padding:0;line-height:1">✏️</button>
+          </div>`
+      }
     </div>
     <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px">
       <span class="weight-num">${cw?cw.v:'—'}</span>
@@ -829,12 +907,33 @@ function renderHome(){
   <div class="streak-row">${days.map(d=>`<div class="sday${d.done?' done':d.today?' today':''}"><span class="sdl">${d.l}</span><span class="sdi">${d.done?'✓':d.today?'·':'–'}</span></div>`).join('')}</div>
   ${weightCard}
   ${nailCard}
-  <div class="slabel">MES PILIERS</div>
-  <div class="mod-grid">${ST.mods.map(m=>{const p=modPct(m.id);const icFn=IC[m.ic];return`<div class="mod-card${p===100?' done':''}" onclick="openMod('${m.id}')">
-    <div class="mod-top"><span style="color:${m.color}">${typeof icFn==='function'?icFn(m.color):''}</span><span class="mod-pct">${p}%</span></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div class="slabel" style="margin:0">MES PILIERS</div>
+    <button onclick="_libOpen=true;r()" style="background:var(--accent);color:#1A0F3C;border:none;border-radius:100px;width:26px;height:26px;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;flex-shrink:0">+</button>
+  </div>
+  <div class="mod-grid">${ST.mods.map(m=>{const p=modPct(m.id);const emoji=MOD_EMOJI[m.id]||'⭐';return`<div class="mod-card${p===100?' done':''}" onclick="openMod('${m.id}')">
+    <div class="mod-top"><span style="font-size:22px;line-height:1">${emoji}</span><span class="mod-pct">${p}%</span></div>
     <div class="mod-name" style="color:${m.color}">${m.name}</div>
     <div class="mod-bar"><div class="mod-fill" style="width:${p}%;background:${m.color}"></div></div>
-  </div>`}).join('')}</div>`
+  </div>`}).join('')}</div>
+  ${_libOpen?`<div style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:999;display:flex;align-items:flex-end" onclick="if(event.target===this){_libOpen=false;r()}">
+    <div style="background:var(--bg2);border-radius:20px 20px 0 0;padding:20px 16px 40px;width:100%;max-height:80vh;overflow-y:auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div><div class="slabel" style="margin:0">BIBLIOTHÈQUE DE PILIERS</div><div style="font-size:11px;color:var(--text3);margin-top:2px">${ST.mods.length}/23 actifs</div></div>
+        <button onclick="_libOpen=false;r()" style="background:var(--bg4);border:none;border-radius:100px;width:30px;height:30px;color:var(--text);font-size:16px;cursor:pointer">×</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${PILIERS_LIB.map(p=>{const active=ST.mods.some(m=>m.id===p.id);return`<div onclick="toggleLibMod('${p.id}')" style="background:${active?'rgba(200,240,74,.12)':'var(--bg3)'};border:0.5px solid ${active?'var(--accent)':'var(--border)'};border-radius:12px;padding:12px 10px;cursor:pointer;transition:all .2s">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-size:20px">${MOD_EMOJI[p.id]||'⭐'}</span>
+            <span style="font-size:11px;font-weight:700;color:${active?'var(--accent)':'var(--text3)'};font-family:'DM Mono',monospace">${active?'ON':'+'}</span>
+          </div>
+          <div style="font-size:12px;font-weight:600;color:${p.color}">${p.name}</div>
+          <div style="font-size:9px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:2px">${p.checks.length} tâches · ${p.xps.reduce((a,x)=>a+x,0)} XP</div>
+        </div>`}).join('')}
+      </div>
+    </div>
+  </div>`:''}  `
 }
 
 // ── RENDER MODULE ─────────────────────────────────────────────────────────────
@@ -845,7 +944,7 @@ function renderModule(){
   const earned=m.checks.reduce((a,c,i)=>a+(ST.checks[`${m.id}_${i}`]?m.xps[i]||10:0),0)
   const totalXp=m.xps.reduce((a,x)=>a+x,0)
   const pct=m.checks.length>0?Math.round(done/m.checks.length*100):0
-  const icFn=IC[m.ic]
+  const modEmoji=MOD_EMOJI[m.id]||'⭐'
   const waterHtml=m.id==='water'?`<div class="slabel">TRACKER EAU — ${ST.waters.filter(Boolean).length}/10 (${(ST.waters.filter(Boolean).length*.25).toFixed(1)}L)</div>
     <div class="glass-row">${ST.waters.map((w,i)=>`<div class="gl${w?' on':''}" onclick="toggleWater(${i})">💧</div>`).join('')}</div>`:''
   const body=ST.editMod?
@@ -873,7 +972,7 @@ function renderModule(){
     </button>
   </div>
   <div class="card" style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
-    <span style="color:${m.color}">${typeof icFn==='function'?icFn(m.color):''}</span>
+    <span style="font-size:32px;line-height:1">${modEmoji}</span>
     <div style="flex:1">
       <div style="font-size:14px;font-weight:600;margin-bottom:6px">${m.name} — <span style="color:${m.color}">${pct}%</span></div>
       <div class="xpbar"><div class="xpfill" style="width:${pct}%;background:${m.color}"></div></div>
