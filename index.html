@@ -232,19 +232,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 </head>
 <body>
 <div id="onboard" class="onboard" style="display:none">
-  <svg width="48" height="48" viewBox="0 0 16 16" style="image-rendering:pixelated;margin-bottom:16px" fill="none">
-    <rect x="6" y="2" width="4" height="1" fill="#E63946"/>
-    <rect x="5" y="3" width="6" height="1" fill="#E63946"/>
-    <rect x="5" y="4" width="6" height="4" fill="#C8102E"/>
-    <rect x="6" y="8" width="4" height="2" fill="#C8102E"/>
-    <rect x="7" y="10" width="2" height="2" fill="#C8102E"/>
-    <rect x="6" y="2" width="1" height="1" fill="#C8F04A"/>
-    <rect x="9" y="2" width="1" height="1" fill="#C8F04A"/>
-  </svg>
+  <img src="V..png" width="80" height="80" style="border-radius:16px;object-fit:contain;margin-bottom:16px"/>
   <h1>Vision.</h1>
   <p>Ton lifestyle OS personnel.<br/>Commence par te présenter.</p>
   <input id="ob-name" placeholder="Ton prénom" maxlength="20"/>
-  <input id="ob-weight" type="number" placeholder="Ton poids actuel (kg)" step="0.1"/>
+  <input id="ob-weight" type="number" placeholder="Poids actuel (kg) — ex: 72" step="0.1"/>
+  <input id="ob-goal" type="number" placeholder="Objectif de poids (kg) — ex: 80" step="0.5"/>
   <button onclick="finishOnboard()">COMMENCER →</button>
 </div>
 
@@ -321,9 +314,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 
 <script>
 // ── AUDIO ────────────────────────────────────────────────────────────────────
-const AC = new (window.AudioContext || window.webkitAudioContext)()
+let AC=null;try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}
 function beep(freq=880, dur=0.15, type='sine'){
   try{
+    if(!AC)return
     const o=AC.createOscillator(), g=AC.createGain()
     o.connect(g);g.connect(AC.destination)
     o.frequency.value=freq;o.type=type
@@ -338,17 +332,7 @@ function beepTick(){beep(1200,.05)}
 
 // ── ICONS ────────────────────────────────────────────────────────────────────
 const IC = {
-  logo:`<svg width="38" height="38" viewBox="0 0 16 16" style="image-rendering:pixelated" fill="none">
-    <rect x="6" y="2" width="4" height="1" fill="#E63946"/>
-    <rect x="5" y="3" width="6" height="1" fill="#E63946"/>
-    <rect x="5" y="4" width="6" height="5" fill="#C8102E"/>
-    <rect x="6" y="9" width="4" height="2" fill="#C8102E"/>
-    <rect x="7" y="11" width="2" height="3" fill="#C8102E"/>
-    <rect x="5" y="3" width="1" height="1" fill="#C8F04A"/>
-    <rect x="10" y="3" width="1" height="1" fill="#C8F04A"/>
-    <rect x="5" y="7" width="1" height="1" fill="#C8F04A"/>
-    <rect x="10" y="7" width="1" height="1" fill="#C8F04A"/>
-  </svg>`,
+  logo:`<img src="V..png" width="40" height="40" style="border-radius:8px;object-fit:contain;display:block">`,
   sleep:(c)=>`<svg width="22" height="22" viewBox="0 0 16 16" style="image-rendering:pixelated" fill="none">
     <rect x="3" y="3" width="8" height="1" fill="${c}"/><rect x="9" y="4" width="2" height="1" fill="${c}"/>
     <rect x="7" y="5" width="2" height="1" fill="${c}"/><rect x="5" y="6" width="2" height="1" fill="${c}"/>
@@ -568,8 +552,9 @@ const ST={
   sportStarted:load(`v3_ss_${tk}`,false),
   courses:load(`v3_crs_${tk}`,{}),
   weights:load('v3_weights',[]),
+  weightGoal:load('v3_wgoal',65),
   nailStreak:load('v3_nail',{days:{},count:0}),
-  notifs:load('v3_notifs',{wake:{on:false,time:'5:30'},sport:{on:false,time:'18:30'},water:{on:false,time:'10:00'}}),
+  notifs:load('v3_notifs',{wake:{on:false,time:'05:30'},sport:{on:false,time:'18:30'},water:{on:false,time:'10:00'}}),
   scores:load('v3_scores',{}),
   xpHistory:load('v3_xphist',{}),
   timerExo:45, timerPause:60,
@@ -585,6 +570,7 @@ function persist(){
   sv(`v3_wat_${tk}`,ST.waters);sv(`v3_sport_${tk}`,ST.sportDone)
   sv('v3_sporthist',ST.sportHist);sv(`v3_ss_${tk}`,ST.sportStarted)
   sv(`v3_crs_${tk}`,ST.courses);sv('v3_weights',ST.weights)
+  sv('v3_wgoal',ST.weightGoal)
   sv('v3_nail',ST.nailStreak);sv('v3_notifs',ST.notifs)
   sv('v3_scores',ST.scores);sv('v3_xphist',ST.xpHistory)
 }
@@ -638,11 +624,13 @@ function checkOnboard(){
 function finishOnboard(){
   const name=document.getElementById('ob-name').value.trim()
   const weight=parseFloat(document.getElementById('ob-weight').value)
+  const goal=parseFloat(document.getElementById('ob-goal').value)
   if(!name)return
   ST.name=name
+  if(!isNaN(goal)&&goal>30)ST.weightGoal=goal
   if(!isNaN(weight)&&weight>30){
     const date=new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})
-    ST.weights.push({v:weight,date})
+    ST.weights=[{v:weight,date}]  // repart de zéro
   }
   sv('v3_name',ST.name);persist()
   document.getElementById('onboard').style.display='none'
@@ -650,47 +638,69 @@ function finishOnboard(){
 }
 
 // ── NOTIFICATIONS ─────────────────────────────────────────────────────────────
+let _notifInterval=null
 function requestNotifs(){
-  if('Notification' in window){
-    Notification.requestPermission().then(p=>{
-      if(p==='granted')scheduleNotifs()
-    })
+  if(!('Notification' in window)){alert('Les notifications ne sont pas supportées sur ce navigateur.');return}
+  if(Notification.permission==='granted'){
+    _startNotifInterval()
+    renderHist()
+    return
   }
+  if(Notification.permission==='denied'){
+    alert('Les notifications sont bloquées. Va dans les réglages de ton navigateur pour les autoriser pour ce site.')
+    return
+  }
+  Notification.requestPermission().then(p=>{
+    if(p==='granted'){_startNotifInterval();renderHist()}
+    else alert('Permission refusée — les rappels ne pourront pas s\'activer.')
+  })
 }
-function scheduleNotifs(){
-  // Check each minute if we should fire a notification
-  setInterval(()=>{
+function _startNotifInterval(){
+  if(_notifInterval)return  // déjà démarré
+  _notifInterval=setInterval(()=>{
+    if(Notification.permission!=='granted')return
     const now=new Date()
     const hm=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`
     if(ST.notifs.wake.on&&ST.notifs.wake.time===hm)
-      new Notification('Vision. ☀️',{body:`Réveil ${ST.name} ! Commence ta routine matin.`,icon:''})
+      new Notification('Vision. ☀️',{body:`Réveil ${ST.name} ! Commence ta routine matin.`,icon:'V..png'})
     if(ST.notifs.sport.on&&ST.notifs.sport.time===hm)
-      new Notification('Vision. ⚡',{body:'Heure de la muscu ! Change-toi avant de t\'asseoir.',icon:''})
+      new Notification('Vision. ⚡',{body:"Heure de la muscu ! Change-toi avant de t'asseoir.",icon:'V..png'})
     if(ST.notifs.water.on&&ST.notifs.water.time===hm)
-      new Notification('Vision. 💧',{body:'Rappel hydratation — bois un verre d\'eau.',icon:''})
+      new Notification('Vision. 💧',{body:"Rappel hydratation — bois un verre d'eau.",icon:'V..png'})
   },60000)
 }
 
 // ── TIMER ─────────────────────────────────────────────────────────────────────
-function startTimer(){
+function timerTick(){
+  ST.timerLeft--
+  if(ST.timerLeft<=3&&ST.timerLeft>0)beepTick()
+  if(ST.timerLeft<=0){
+    if(ST.timerPhase==='exo'){
+      ST.timerPhase='pause';ST.timerLeft=ST.timerPause;beepEnd()
+    } else {
+      ST.timerPhase='exo';ST.timerLeft=ST.timerExo;beepStart()
+    }
+  }
+  renderTimerOnly()
+}
+function startFreshTimer(){
   if(ST.timerRunning)return
-  AC.resume()
+  try{AC.resume()}catch(e){}
   ST.timerRunning=true
   ST.timerPhase='exo'
   ST.timerLeft=ST.timerExo
   beepStart()
-  ST.timerInterval=setInterval(()=>{
-    ST.timerLeft--
-    if(ST.timerLeft<=3&&ST.timerLeft>0)beepTick()
-    if(ST.timerLeft<=0){
-      if(ST.timerPhase==='exo'){
-        ST.timerPhase='pause';ST.timerLeft=ST.timerPause;beepEnd()
-      } else {
-        ST.timerPhase='exo';ST.timerLeft=ST.timerExo;beepStart()
-      }
-    }
-    renderTimerOnly()
-  },1000)
+  if(ST.timerInterval){clearInterval(ST.timerInterval);ST.timerInterval=null}
+  ST.timerInterval=setInterval(timerTick,1000)
+  renderSport()
+}
+function resumeTimer(){
+  if(ST.timerRunning)return
+  try{AC.resume()}catch(e){}
+  ST.timerRunning=true
+  // timerLeft et timerPhase gardent leur valeur actuelle — pas de reset
+  if(ST.timerInterval){clearInterval(ST.timerInterval);ST.timerInterval=null}
+  ST.timerInterval=setInterval(timerTick,1000)
   renderSport()
 }
 function pauseTimer(){
@@ -719,26 +729,29 @@ function renderTimerOnly(){
 // ── RENDER HOME ───────────────────────────────────────────────────────────────
 function renderHome(){
   const earned=xpToday(),maxXp=maxXpDay()
-  const totalXp=load('v3_totalxp',1240)+earned
+  const totalXp=computeTotalXp()
   const lvl=getLevel(totalXp)
   const lvlPct=lvl.next?Math.round(((totalXp-lvl.min)/(lvl.next-lvl.min))*100):100
   const dayPct=maxXp>0?Math.round(earned/maxXp*100):0
   const days=todayDays()
   const cw=currentWeight(),delta=weightDelta()
-  const ob65pct=cw?Math.min(Math.round(((cw.v-59)/(65-59))*100),100):0
+  const wGoal=ST.weightGoal||65
+  const startW=ST.weights.length?ST.weights[0].v:wGoal-5
+  const wRange=wGoal-startW||1
+  const ob65pct=cw?Math.min(Math.round(((cw.v-startW)/wRange)*100),100):0
   const greeting=ST.name?`Bonjour, ${ST.name} 👋`:'Bonjour 👋'
 
   const weightCard=`<div class="weight-card">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
       <div class="slabel" style="margin:0">POIDS</div>
-      <span style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">OBJECTIF 65KG</span>
+      <span style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">OBJECTIF ${wGoal}KG</span>
     </div>
     <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px">
       <span class="weight-num">${cw?cw.v:'—'}</span>
       <span style="font-size:16px;color:var(--text3);font-family:'DM Mono',monospace">kg</span>
       ${delta!==null?`<span class="weight-delta" style="background:${delta>=0?'rgba(200,240,74,.15)':'rgba(240,96,128,.15)'};color:${delta>=0?'var(--accent)':'#F06080'}">${delta>=0?'+':''}${delta.toFixed(1)}kg</span>`:''}
     </div>
-    ${cw?`<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">59 → 65kg</span><span style="font-size:10px;color:var(--accent);font-family:'DM Mono',monospace">${ob65pct}%</span></div>
+    ${cw?`<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">${startW.toFixed(1)} → ${wGoal}kg</span><span style="font-size:10px;color:var(--accent);font-family:'DM Mono',monospace">${ob65pct}%</span></div>
     <div class="xpbar" style="height:5px;margin-bottom:10px"><div class="xpfill" style="width:${ob65pct}%;background:var(--accent)"></div></div>`:''}
     <div class="weight-input-row">
       <input class="weight-in" id="w-in" type="number" step="0.1" placeholder="${cw?cw.v:'59.0'}"/>
@@ -922,7 +935,7 @@ function renderSport(){
     <div class="timer-controls">
       ${ST.timerRunning?
         `<button class="timer-btn secondary" onclick="pauseTimer()">⏸ PAUSE</button>`:
-        `<button class="timer-btn primary" onclick="startTimer()">▶ REPRENDRE</button>`}
+        `<button class="timer-btn primary" onclick="resumeTimer()">▶ REPRENDRE</button>`}
       <button class="timer-btn secondary" onclick="stopTimer()">⏹ STOP</button>
     </div>
   </div>`:`<div class="timer-settings" style="margin-bottom:12px">
@@ -1073,7 +1086,7 @@ function renderHist(){
     <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">
       <span>Départ: ${ST.weights[0]?.v}kg</span>
       <span>Actuel: ${ST.weights[ST.weights.length-1]?.v}kg</span>
-      <span>Objectif: 65kg</span>
+      <span>Objectif: ${ST.weightGoal}kg</span>
     </div>
   </div>`:'<div class="info-box">Commence à peser pour voir ta courbe de progression.</div>'
 
@@ -1108,7 +1121,7 @@ function renderHist(){
 
 // ── RENDER DASH ───────────────────────────────────────────────────────────────
 function renderDash(){
-  const earned=xpToday(),totalXp=load('v3_totalxp',1240)+earned,lvl=getLevel(totalXp)
+  const earned=xpToday(),totalXp=computeTotalXp(),lvl=getLevel(totalXp)
   const week=[{n:'Sommeil',p:85,c:'#B8A0F8'},{n:'Mindset',p:90,c:'#F472B6'},{n:'Focus',p:60,c:'#8BE8C8'},{n:'Lecture',p:75,c:'#F0A050'},{n:'Méditation',p:65,c:'#8BE8C8'},{n:'Hydratation',p:80,c:'#5BB8F5'},{n:'Finance',p:40,c:'#C8F04A'},{n:'Masse',p:30,c:'#B8A0F8'}]
   const avg=Math.round(week.reduce((a,w)=>a+w.p,0)/week.length)
   const objs=[{l:'Prise de masse',t:'59→65kg (+0.3kg/sem)',p:8,c:'#B8A0F8'},{l:'Course à pied',t:'5km sans arrêt',p:12,c:'#8BE8C8'},{l:'Lecture',t:'6 livres (1/15j)',p:33,c:'#F0A050'},{l:'Épargne',t:'30% revenus/mois',p:50,c:'#C8F04A'},{l:'Ongles',t:'90j sans ronger',p:Math.round((ST.nailStreak.count/90)*100),c:'#F472B6'}]
@@ -1198,7 +1211,7 @@ function rmExo(name){ST.sportDone=ST.sportDone.filter(e=>e.n!==name);persist();r
 function launchSport(){
   ST.sportHist[tk]=[...new Set(ST.sportDone.map(e=>e.gid))]
   ST.sportStarted=true;persist()
-  startTimer()
+  startFreshTimer()
 }
 function updChk(modId,idx,val){const m=ST.mods.find(x=>x.id===modId);if(m)m.checks[idx]=val;persist()}
 function delChk(modId,idx){const m=ST.mods.find(x=>x.id===modId);if(m){m.checks.splice(idx,1);m.xps.splice(idx,1)}persist();r()}
@@ -1242,6 +1255,8 @@ function copyCourses(){
 }
 // Save today's score to history
 function saveDayScore(){ST.scores[tk]=xpToday();persist()}
+// Total XP cumulé sur tous les jours
+function computeTotalXp(){return Object.values(ST.scores).reduce((a,v)=>a+v,0)}
 
 function r(){
   saveDayScore()
@@ -1258,8 +1273,8 @@ function r(){
 
 // Init
 checkOnboard()
-requestNotifs()
-scheduleNotifs()
+// Démarre l'interval de notifications si permission déjà accordée (session précédente)
+if(typeof Notification!=='undefined'&&Notification.permission==='granted')_startNotifInterval()
 r()
 </script>
 </body>
