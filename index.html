@@ -551,6 +551,7 @@ const ST={
   sportHist:load('v3_sporthist',{}),
   sportStarted:load(`v3_ss_${tk}`,false),
   courses:load(`v3_crs_${tk}`,{}),
+  coursesData:load('v3_courses_data',COURSES_DATA),
   weights:load('v3_weights',[]),
   weightGoal:load('v3_wgoal',65),
   nailStreak:load('v3_nail',{days:{},count:0}),
@@ -569,8 +570,8 @@ function persist(){
   sv('v3_rout',ST.routine);sv(`v3_rc_${tk}`,ST.rchecks)
   sv(`v3_wat_${tk}`,ST.waters);sv(`v3_sport_${tk}`,ST.sportDone)
   sv('v3_sporthist',ST.sportHist);sv(`v3_ss_${tk}`,ST.sportStarted)
-  sv(`v3_crs_${tk}`,ST.courses);sv('v3_weights',ST.weights)
-  sv('v3_wgoal',ST.weightGoal)
+  sv(`v3_crs_${tk}`,ST.courses);sv('v3_courses_data',ST.coursesData)
+  sv('v3_weights',ST.weights);sv('v3_wgoal',ST.weightGoal)
   sv('v3_nail',ST.nailStreak);sv('v3_notifs',ST.notifs)
   sv('v3_scores',ST.scores);sv('v3_xphist',ST.xpHistory)
 }
@@ -608,6 +609,22 @@ function todayDays(){
   const labels=['D','L','M','M','J','V','S']
   const today=new Date().getDay()
   return labels.map((l,i)=>({l,done:i<today,today:i===today}))
+}
+function calcStreak(){
+  const now=new Date()
+  const key=d=>{const dt=new Date(now);dt.setDate(dt.getDate()-d);return`${dt.getFullYear()}-${dt.getMonth()}-${dt.getDate()}`}
+  // Si aujourd'hui a 0 XP on regarde si hier avait du score (streak en cours)
+  let start=0
+  if(!(ST.scores[key(0)]>0)){
+    if(ST.scores[key(1)]>0)start=1
+    else return 0
+  }
+  let streak=0
+  for(let d=start;d<365;d++){
+    if((ST.scores[key(d)]||0)>0)streak++
+    else break
+  }
+  return streak
 }
 function currentWeight(){return ST.weights.length?ST.weights[ST.weights.length-1]:null}
 function weightDelta(){
@@ -803,7 +820,7 @@ function renderHome(){
     ${lvl.next?`<div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:4px">Prochain : NIV.${lvl.num+1} ${LEVELS[lvl.num].name} — ${lvl.next-totalXp} XP restants</div>`:'<div style="font-size:10px;color:var(--accent);font-family:\'DM Mono\',monospace;margin-top:4px">NIVEAU MAXIMUM ATTEINT 🏆</div>'}
   </div>
   <div class="mg2">
-    <div class="mc"><div class="mv">4 🔥</div><div class="ml">STREAK JOURS</div></div>
+    <div class="mc"><div class="mv">${calcStreak()} 🔥</div><div class="ml">STREAK JOURS</div></div>
     <div class="mc"><div class="mv">${Math.round(dayPct)}%</div><div class="ml">SCORE JOUR</div></div>
     <div class="mc"><div class="mv">${ST.mods.filter(m=>modPct(m.id)===100).length}/${ST.mods.length}</div><div class="ml">MODULES OK</div></div>
     <div class="mc"><div class="mv">${ST.nailStreak.count}💅</div><div class="ml">STREAK ONGLES</div></div>
@@ -1023,18 +1040,28 @@ function renderAlim(){
     </div>`).join('')}`
   }
   if(ST.alimTab==='courses'){
-    const ctotal=COURSES_DATA.reduce((a,c)=>a+c.items.length,0)
+    const ctotal=ST.coursesData.reduce((a,c)=>a+c.items.length,0)
     body=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
       <div class="slabel" style="margin:0">LISTE DE COURSES</div>
       <span style="font-size:10px;font-weight:600;color:var(--text2);font-family:'DM Mono',monospace">${cdone}/${ctotal}</span>
     </div>
-    ${COURSES_DATA.map((cat,ci)=>`<div style="margin-bottom:18px">
+    ${ST.coursesData.map((cat,ci)=>`<div style="margin-bottom:18px">
       <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:${cat.bc};margin-bottom:8px;font-family:'DM Mono',monospace">${cat.cat}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-        ${cat.items.map((item,ii)=>{const key=`${ci}-${ii}`,on=ST.courses[key];return`<div class="fitem${on?' ck':''}" onclick="togCourse('${key}')">
-          <div class="fcb">${on?FCHK:''}</div>
-          <div><div class="fn">${item.n}</div><div class="fq">${item.q}</div><div class="fw2">${item.w}</div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+        ${cat.items.map((item,ii)=>{const key=`${ci}-${ii}`,on=ST.courses[key];return`<div style="position:relative">
+          <div class="fitem${on?' ck':''}" onclick="togCourse('${key}')" style="padding-right:28px">
+            <div class="fcb">${on?FCHK:''}</div>
+            <div><div class="fn">${item.n}</div>${item.q?`<div class="fq">${item.q}</div>`:''}</div>
+          </div>
+          <button onclick="event.stopPropagation();delCourseItem(${ci},${ii})" style="position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:4px;background:rgba(240,96,128,.15);border:none;cursor:pointer;color:#F06080;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center">×</button>
         </div>`}).join('')}
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input id="ci-name-${ci}" placeholder="+ Ajouter un article" onkeydown="if(event.key==='Enter')addCourseItem(${ci})"
+          style="flex:1;background:var(--bg3);border:0.5px dashed rgba(200,240,74,.3);border-radius:var(--r);padding:7px 10px;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;outline:none"/>
+        <input id="ci-qty-${ci}" placeholder="Qté" onkeydown="if(event.key==='Enter')addCourseItem(${ci})"
+          style="width:52px;background:var(--bg3);border:0.5px dashed rgba(200,240,74,.3);border-radius:var(--r);padding:7px 8px;color:var(--text);font-size:11px;font-family:'DM Mono',monospace;outline:none;text-align:center"/>
+        <button onclick="addCourseItem(${ci})" style="width:30px;height:30px;border-radius:6px;background:rgba(200,240,74,.15);border:0.5px solid rgba(200,240,74,.3);cursor:pointer;color:var(--accent);font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0">+</button>
       </div>
     </div>`).join('')}
     ${cdone>0?`<button class="copy-btn" id="copy-btn" onclick="copyCourses()">📋 COPIER POUR NOTES (${cdone} articles)</button>`:''}`
@@ -1136,7 +1163,7 @@ function renderDash(){
   </div>
   <div class="mg2">
     <div class="mc"><div class="mv">${avg}%</div><div class="ml">SCORE SEMAINE</div></div>
-    <div class="mc"><div class="mv">4 🔥</div><div class="ml">STREAK</div></div>
+    <div class="mc"><div class="mv">${calcStreak()} 🔥</div><div class="ml">STREAK</div></div>
     <div class="mc"><div class="mv">NIV.${lvl.num}</div><div class="ml">${lvl.name.toUpperCase()}</div></div>
     <div class="mc"><div class="mv">${totalXp}</div><div class="ml">XP TOTAL</div></div>
   </div>
@@ -1157,7 +1184,23 @@ function renderDash(){
       <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px;font-weight:500">${b.l}</span><span style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace">${b.p}</span></div>
       <div class="xpbar"><div class="xpfill" style="width:${b.pct}%;background:#B8A0F8"></div></div>
     </div>
-  </div>`).join('')}</div>`
+  </div>`).join('')}</div>
+  <div style="margin-top:32px;padding-top:20px;border-top:0.5px solid var(--border)">
+    <div class="slabel">COMPTE</div>
+    ${_resetStep===0
+      ? `<button onclick="resetAccount()" style="width:100%;padding:12px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);color:var(--text3);font-size:11px;cursor:pointer;font-family:'DM Mono',monospace;letter-spacing:.05em">
+          🗑 RÉINITIALISER MON COMPTE
+        </button>`
+      : `<div style="background:rgba(240,96,128,.08);border:1px solid rgba(240,96,128,.3);border-radius:var(--r2);padding:16px;text-align:center">
+          <div style="font-size:13px;font-weight:600;color:#F06080;margin-bottom:8px">⚠ Toutes tes données seront effacées</div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:16px;font-family:'DM Mono',monospace">XP, poids, streak, modules, routine…<br>Cette action est irréversible.</div>
+          <div style="display:flex;gap:8px">
+            <button onclick="_resetStep=0;renderDash()" style="flex:1;padding:10px;background:var(--bg3);border:0.5px solid var(--border2);border-radius:var(--r);color:var(--text2);font-size:11px;cursor:pointer;font-family:'DM Mono',monospace">ANNULER</button>
+            <button onclick="resetAccount()" style="flex:1;padding:10px;background:#F06080;border:none;border-radius:var(--r);color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Mono',monospace">CONFIRMER ✓</button>
+          </div>
+        </div>`
+    }
+  </div>`
 }
 
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
@@ -1196,6 +1239,30 @@ function togEditRout(){ST.editRout=!ST.editRout;r()}
 function togMuscle(id){ST.openMuscle=ST.openMuscle===id?null:id;r()}
 function setAlimTab(t){ST.alimTab=t;r()}
 function togCourse(key){ST.courses[key]=!ST.courses[key];persist();r()}
+function addCourseItem(ci){
+  const ni=document.getElementById(`ci-name-${ci}`),qi=document.getElementById(`ci-qty-${ci}`)
+  const name=(ni?ni.value:'').trim(),qty=(qi?qi.value:'').trim()
+  if(!name)return
+  ST.coursesData[ci].items.push({n:name,q:qty,w:''})
+  if(ni)ni.value='';if(qi)qi.value=''
+  persist();r()
+}
+function delCourseItem(ci,ii){
+  ST.coursesData[ci].items.splice(ii,1)
+  // Efface les checks de cette catégorie (indices décalés)
+  Object.keys(ST.courses).filter(k=>k.startsWith(`${ci}-`)).forEach(k=>delete ST.courses[k])
+  persist();r()
+}
+let _resetStep=0
+function resetAccount(){
+  if(_resetStep===0){_resetStep=1;renderDash();return}
+  // Efface toutes les clés v3_
+  for(let i=localStorage.length-1;i>=0;i--){
+    const k=localStorage.key(i);if(k&&k.startsWith('v3_'))localStorage.removeItem(k)
+  }
+  localStorage.removeItem('v3_dark')
+  window.location.reload()
+}
 function toggleTheme(){
   isDark=!isDark;sv('v3_dark',isDark)
   document.documentElement.classList.toggle('light',!isDark)
@@ -1240,9 +1307,9 @@ function togNotif(key){
 function updNotif(key,field,val){ST.notifs[key][field]=val;persist()}
 function copyCourses(){
   const lines=['📋 LISTE DE COURSES — Vision.\n']
-  COURSES_DATA.forEach((cat,ci)=>{
+  ST.coursesData.forEach((cat,ci)=>{
     const checked=cat.items.filter((_,ii)=>ST.courses[`${ci}-${ii}`])
-    if(checked.length){lines.push(`\n${cat.cat.toUpperCase()}`);checked.forEach(it=>lines.push(`☐ ${it.n} — ${it.q}`))}
+    if(checked.length){lines.push(`\n${cat.cat.toUpperCase()}`);checked.forEach(it=>lines.push(`☐ ${it.n}${it.q?' — '+it.q:''}`))}
   })
   lines.push(`\nGénéré le ${new Date().toLocaleDateString('fr-FR')} · Vision.`)
   const txt=lines.join('\n')
